@@ -1,0 +1,3 @@
+[submodule "OnexKernel"]
+	path = OnexKernel
+	url = git@github.com:DuncanCragg/OnexKernel.git
