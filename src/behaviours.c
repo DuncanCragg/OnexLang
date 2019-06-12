@@ -1,5 +1,5 @@
 #include <onf.h>
-#include <behaviours.h>
+#include <onr.h>
 
 bool evaluate_light_logic(object* light, void* d)
 {
