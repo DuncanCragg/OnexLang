@@ -36,6 +36,10 @@ libOnexLang.a: CHANNELS=-DONP_CHANNEL_SERIAL
 libOnexLang.a: $(C_SOURCE_FILES:.c=.o)
 	$(AR) rcs $@ $^
 
+libOnexAndroidLang.a: android/onexlang/src/main/jni/OnexApp.cpp
+	(cd android; ./gradlew build)
+	cp android/onexlang/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/libOnexAndroidLang.a .
+
 tests.linux: COMPILE_LINE=${LINUX_FLAGS} ${CC_FLAGS} $(LINUX_CC_SYMBOLS) ${INCLUDES}
 tests.linux: CC=/usr/bin/gcc
 tests.linux: LD=/usr/bin/gcc
@@ -45,6 +49,15 @@ tests.linux: libOnexLang.a ${TESTS_OBJECTS:.c=.o}
 	$(LD) ${TESTS_OBJECTS:.c=.o} -L. -lOnexLang -LOnexKernel -lOnexKernel -o $@
 
 #############################:
+
+linux.library: libOnexKernel.a
+
+android.library: libOnexAndroidLang.a
+
+android.tests: android.library
+	adb -d uninstall network.object.onexlang || echo not found
+	adb -d install android/onexlang/build/outputs/apk/onexlang-debug.apk
+	adb logcat OnexApp:D *:S
 
 linux.tests: tests.linux
 	./tests.linux
@@ -73,6 +86,7 @@ clean:
 
 cleanx: clean
 	rm -f *.linux
+	rm -rf android/build android/*/build android/*/.externalNativeBuild/ android/.gradle/*/*
 
 cleanlibs: cleanx
 	rm -f libOnex*.a
