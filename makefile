@@ -11,7 +11,7 @@ targets:
 INCLUDES = \
 -I./include \
 -I./src/ \
--I./tests \
+-I./OnexKernel/tests \
 -I./OnexKernel/include \
 
 
@@ -20,8 +20,8 @@ C_SOURCE_FILES = \
 
 
 TESTS_OBJECTS = \
-./tests/assert.c \
-./tests/test-onexlang.c \
+./OnexKernel/tests/assert.c \
+./tests/test-behaviours.c \
 ./tests/main.c \
 
 
@@ -42,7 +42,7 @@ tests.linux: LD=/usr/bin/gcc
 tests.linux: TARGET=TARGET_LINUX
 tests.linux: CHANNELS=-DONP_CHANNEL_SERIAL
 tests.linux: libOnexLang.a ${TESTS_OBJECTS:.c=.o}
-	$(LD) ${TESTS_OBJECTS:.c=.o} -L. -lOnexLang -o $@
+	$(LD) ${TESTS_OBJECTS:.c=.o} -L. -lOnexLang -LOnexKernel -lOnexKernel -o $@
 
 #############################:
 
