@@ -5,7 +5,7 @@
 
 /* Default, hard-coded behaviour evaluators */
 
-bool evaluate_light_logic(object* light, void* d);
+bool evaluate_light_logic(object* o, void* d);
 
 /* The Onex Language evaluator */
 
