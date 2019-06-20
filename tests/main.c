@@ -6,6 +6,7 @@
 #include <variant.h>
 #endif
 #include <assert.h>
+#include <onf.h>
 
 extern void run_light_tests();
 
@@ -28,6 +29,8 @@ int main(void) {
 #endif
 
   log_write("-----------------ONR tests------------------------\n");
+
+  onex_init("");
 
   run_light_tests();
 

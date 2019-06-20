@@ -27,8 +27,10 @@ bool evaluate_light_io(object* light, void* d)
   return true;
 }
 
-void test_light()
+void run_light_tests()
 {
+  log_write("------light behaviour tests-----\n");
+
   onex_set_evaluators("evaluate_button", evaluate_button_io, 0);
   onex_set_evaluators("evaluate_light", evaluate_light_logic, evaluate_light_io, 0);
 
@@ -48,17 +50,14 @@ void test_light()
 
   button_pressed=true;
   onex_run_evaluators(buttonuid, (void*)button_pressed);
-}
-
-void run_light_tests()
-{
-  log_write("------light behaviour tests-----\n");
-
-  onex_init("");
-
-  test_light();
 
   onex_assert_equal_num(evaluate_button_io_called, 2,  "evaluate_button_io was called");
   onex_assert_equal_num(evaluate_light_io_called, 3,  "evaluate_light_io was called");
+}
+
+{
+
+
+
 }
 
