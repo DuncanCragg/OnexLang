@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <onex-kernel/log.h>
+#include <items.h>
 #include <onr.h>
 
 // ---------------------------------------------------------------------------------
@@ -55,9 +56,27 @@ void run_light_tests()
   onex_assert_equal_num(evaluate_light_io_called, 3,  "evaluate_light_io was called");
 }
 
+void run_evaluate_object_setter_tests()
 {
+  log_write("------object setter behaviour tests-----\n");
 
+  onex_set_evaluators("evaluate_setter", evaluate_object_setter, 0);
 
+  object* target=object_new(0, "evaluate_setter", "thing", 4);
 
+  char* targetuid=object_property(target, "UID");
+
+  properties* update = properties_new(3);
+  list*       li=list_new(3);
+  list_add(li, value_new("fig"));
+  list_add(li, value_new("=>"));
+  list_add(li, value_new("mango"));
+  properties_set(update, value_new("banana"), li);
+
+  onex_run_evaluators(targetuid, update);
+
+  onex_loop();
+
+  onex_assert_equal(object_property(target, "banana"), "mango", "evaluate_object_setter set banana to mango");
 }
 
