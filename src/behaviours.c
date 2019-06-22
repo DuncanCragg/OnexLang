@@ -44,7 +44,7 @@ void apply_update(object* o, properties* update)
 
 bool evaluate_object_setter(object* o, void* d)
 {
-  apply_update(o, (properties*)d);
+  if(d) apply_update(o, (properties*)d);
   return true;
 }
 
