@@ -39,6 +39,7 @@ void apply_update(object* o, properties* update)
       }
     }
   }
+  properties_free(update, true);
 }
 
 bool evaluate_object_setter(object* o, void* d)
