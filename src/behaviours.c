@@ -28,6 +28,14 @@ void apply_update(object* o, properties* update)
         if(item_is_type(r, ITEM_VALUE)){
           object_property_set(o, value_string(key), value_string((value*)r));
         }
+        continue;
+      }
+      item* r1 = list_get_n(li, arrow+1);
+      item* r2 = list_get_n(li, arrow+2);
+      if(item_is_type(r1, ITEM_VALUE) && item_is_type(r2, ITEM_VALUE)){
+        if(item_equal(r1, value_new("@."))){
+          object_property_add(o, value_string(key), value_string((value*)r2));
+        }
       }
     }
   }
