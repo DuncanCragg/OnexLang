@@ -91,5 +91,17 @@ void run_evaluate_object_setter_tests()
   onex_loop();
 
   onex_assert_equal(object_property_values(target, "banana"), "mango orange", "evaluate_object_setter set banana to 'mango orange'");
+
+  update = properties_new(3);
+  li=list_new(3);
+  list_add(li, value_new("=>"));
+  list_add(li, value_new(""));
+  properties_set(update, value_new("banana:1"), li);
+
+  onex_run_evaluators(targetuid, update);
+
+  onex_loop();
+
+  onex_assert_equal(object_property_values(target, "banana"), "orange", "evaluate_object_setter set banana to 'orange'");
 }
 
