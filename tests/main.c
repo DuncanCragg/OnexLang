@@ -10,6 +10,7 @@
 
 extern void run_light_tests();
 extern void run_evaluate_object_setter_tests();
+extern void run_device_tests();
 
 #if defined(NRF5)
 const uint8_t leds_list[LEDS_NUMBER] = LEDS_LIST;
@@ -35,6 +36,7 @@ int main(void) {
 
   run_light_tests();
   run_evaluate_object_setter_tests();
+  run_device_tests();
 
   int failures=onex_assert_summary();
 

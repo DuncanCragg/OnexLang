@@ -48,3 +48,14 @@ bool evaluate_object_setter(object* o, void* d)
   return true;
 }
 
+bool evaluate_device_logic(object* o, void* d)
+{
+  if(object_property_contains(o, (char*)"Alerted:is", (char*)"device")){
+    char* devuid=object_property(o, (char*)"Alerted");
+    if(!object_property_contains(o, (char*)"connected-devices", devuid)){
+      object_property_add(o, (char*)"connected-devices", devuid);
+    }
+  }
+  return true;
+}
+

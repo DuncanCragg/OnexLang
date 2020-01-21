@@ -105,3 +105,18 @@ void run_evaluate_object_setter_tests()
   onex_assert_equal(object_property_values(target, "banana"), "orange", "evaluate_object_setter set banana to 'orange'");
 }
 
+void run_device_tests()
+{
+  log_write("------device behaviour tests-----\n");
+
+  onex_set_evaluators("evaluate_device", evaluate_device_logic, 0);
+  object_set_evaluator(onex_device_object, (char*)"evaluate_device");
+
+  object_property_set(onex_device_object, "incoming", "uid-incomingdevice");
+  object_property(onex_device_object, "incoming:UID");
+  object* incomingdevice=onex_get_from_cache("uid-incomingdevice");
+  object_property_set(incomingdevice, "is", "device");
+
+  onex_assert_equal(object_property(onex_device_object, "connected-devices"), "uid-incomingdevice", "device evaluator adds incoming device to connected-devices");
+}
+
