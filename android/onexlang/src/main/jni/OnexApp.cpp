@@ -9,6 +9,8 @@ extern "C" {
 #include <onf.h>
 #include <assert.h>
 extern void run_light_tests();
+extern void run_evaluate_object_setter_tests();
+extern void run_device_tests();
 }
 
 android_app* androidApp;
@@ -75,7 +77,11 @@ public:
     extern char* sprintExternalStorageDirectory(char* buf, int buflen, const char* format);
     char dbpath[128]; sprintExternalStorageDirectory(dbpath, 128, "%s/Onex/onex.ondb");
 
+    onex_init("");
+
     run_light_tests();
+    run_evaluate_object_setter_tests();
+    run_device_tests();
 
     int failures=onex_assert_summary();
 

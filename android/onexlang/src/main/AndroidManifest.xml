@@ -17,7 +17,7 @@
                android:hasCode="false">
 
     <activity android:name="android.app.NativeActivity"
-              android:label="Onex"
+              android:label="OnexLang"
               android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
               android:launchMode="singleTask"
               android:screenOrientation="landscape"

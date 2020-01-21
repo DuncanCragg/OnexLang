@@ -59,6 +59,11 @@ android.tests: android.library
 	adb -d install android/onexlang/build/outputs/apk/onexlang-debug.apk
 	adb logcat OnexApp:D *:S
 
+android.tests.lan: android.library
+	adb uninstall network.object.onexlang || echo not found
+	adb install android/onexlang/build/outputs/apk/onexlang-debug.apk
+	adb logcat OnexApp:D *:S
+
 linux.tests: tests.linux
 	./tests.linux
 
