@@ -10,6 +10,7 @@ extern "C" {
 #include <assert.h>
 extern void run_light_tests();
 extern void run_evaluate_object_setter_tests();
+extern void run_evaluate_edit_rule_tests();
 extern void run_device_tests();
 }
 
@@ -81,6 +82,7 @@ public:
 
     run_light_tests();
     run_evaluate_object_setter_tests();
+    run_evaluate_edit_rule_tests();
     run_device_tests();
 
     int failures=onex_assert_summary();
