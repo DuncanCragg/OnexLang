@@ -6,9 +6,8 @@
 
 bool evaluate_light_logic(object* o, void* d)
 {
-  bool buttonpressed=object_property_is(o, "button:state", "down");
-  char* s=(char*)(buttonpressed? "on": "off");
-  object_property_set(o, "light", s);
+  if(object_property_is(o, "button:state", "up"  )) object_property_set(o, "light", (char*)"off");
+  if(object_property_is(o, "button:state", "down")) object_property_set(o, "light", (char*)"on");
   return true;
 }
 
