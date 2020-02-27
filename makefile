@@ -1,7 +1,5 @@
 
 ############################################################################################
-# makefile needs consolidating - it has un-merged lines from a Nordic example at the end
-############################################################################################
 
 targets:
 	@grep '^[a-zA-Z0-9\.#-]\+:' makefile | grep -v '^\.' | grep -v targets | sed 's/:.*//' | uniq | sed 's/\.elf/.hex/' | sed 's/^/make clean /'
