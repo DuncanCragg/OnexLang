@@ -66,8 +66,6 @@ public:
     return 0;
   }
 
-  object* button;
-
   void run()
   {
     log_init();
