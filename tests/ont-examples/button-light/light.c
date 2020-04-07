@@ -51,7 +51,7 @@ int main()
 #endif
 
   onex_set_evaluators("evaluate_device", evaluate_device_logic, 0);
-  onex_set_evaluators("evaluate_light",  evaluate_light_logic, evaluate_light_io, 0);
+  onex_set_evaluators("evaluate_light",  evaluate_edit_rule, evaluate_light_logic, evaluate_light_io, 0);
 #if defined(SYNC_TO_PEER_CLOCK)
   onex_set_evaluators("evaluate_clock",  evaluate_clock_sync, evaluate_clock, 0);
 #else
