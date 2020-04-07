@@ -185,10 +185,18 @@ void run_clock_tests()
 
   onex_assert_equal(object_property_values(clock_synced_from, "timestamp"), "12345678", "clock updates");
   onex_assert_equal(object_property_values(clock_synced_from, "date"), "1970/05/23", "clock updates");
+#if defined(NRF5)
+  onex_assert_equal(object_property_values(clock_synced_from, "time"), "21:21:18", "clock updates");
+#else
   onex_assert_equal(object_property_values(clock_synced_from, "time"), "22:21:18", "clock updates");
+#endif
 
   onex_assert_equal(object_property_values(clock_to_sync, "timestamp"), "12345678", "clocks synced");
   onex_assert_equal(object_property_values(clock_to_sync, "date"), "1970/05/23", "clocks synced");
+#if defined(NRF5)
+  onex_assert_equal(object_property_values(clock_to_sync, "time"), "21:21:18", "clocks synced");
+#else
   onex_assert_equal(object_property_values(clock_to_sync, "time"), "22:21:18", "clocks synced");
+#endif
 }
 

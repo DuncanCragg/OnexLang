@@ -1,0 +1,23 @@
+
+Make cleanlibs android.tests
+..or..
+Make cleanlibs android.tests.lan
+
+Make clean linux.tests
+
+# edit makefile: tests
+make clean && make -j flash
+
+# edit makefile: button
+make clean && make -j flash
+Make clean linux.light
+
+# edit makefile: light
+make clean && make -j flash
+Make clean linux.button
+
+# tests on PineTime
+make -f makefile-s132 clean
+make -j -f makefile-s132
+oprg _build/onex.hex
+

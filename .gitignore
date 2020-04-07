@@ -11,3 +11,6 @@ local.properties
 *.elf
 *.linux
 Onex/
+_build
+dfu.zip
+sdk
