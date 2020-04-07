@@ -5,14 +5,14 @@ Make cleanlibs android.tests.lan
 
 Make clean linux.tests
 
-# edit makefile: tests
+# edit target: tests
 make clean && make -j flash0
 
-# edit makefile: button
+# edit target: button
 make clean && make -j flash0
 Make clean linux.light
 
-# edit makefile: light
+# edit target: light
 make clean && make -j flash0
 Make clean linux.button
 
