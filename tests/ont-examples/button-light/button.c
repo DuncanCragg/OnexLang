@@ -21,8 +21,12 @@
 char* buttonuid;
 char* clockuid;
 
-void button_1_change_cb(int);
 bool evaluate_button_io(object* button, void* pressed);
+
+static void button_1_change_cb(int button_pressed)
+{
+  onex_run_evaluators(buttonuid, (void*)(bool)button_pressed);
+}
 
 static void every_second()
 {
@@ -71,11 +75,8 @@ int main()
 
   object* oclock=object_new(0, "evaluate_clock", "clock event", 12);
   object_property_set(oclock, "title", "OnexOS Clock");
-  object_property_set(oclock, "timestamp", "1585045750");
   object_property_set(oclock, "timezone", "GMT");
   object_property_set(oclock, "daylight", "BST");
-  object_property_set(oclock, "date", "2020-03-24");
-  object_property_set(oclock, "time", "12:00:00");
 #if defined(SYNC_TO_PEER_CLOCK)
   object_property_set(oclock, "device", deviceuid);
 #endif
@@ -103,11 +104,6 @@ int main()
     }
 #endif
   }
-}
-
-void button_1_change_cb(int button_pressed)
-{
-  onex_run_evaluators(buttonuid, (void*)(bool)button_pressed);
 }
 
 bool evaluate_button_io(object* button, void* pressed)

@@ -68,11 +68,8 @@ int main()
 
   object* oclock=object_new(0, "evaluate_clock", "clock event", 12);
   object_property_set(oclock, "title", "OnexOS Clock");
-  object_property_set(oclock, "timestamp", "1585045750");
   object_property_set(oclock, "timezone", "GMT");
   object_property_set(oclock, "daylight", "BST");
-  object_property_set(oclock, "date", "2020-03-24");
-  object_property_set(oclock, "time", "12:00:00");
 #if defined(SYNC_TO_PEER_CLOCK)
   object_property_set(oclock, "device", deviceuid);
 #endif
@@ -102,15 +99,6 @@ int main()
 
 bool evaluate_light_io(object* light, void* d)
 {
-  if(!object_property_contains(light, "button:is", "button")){
-    int ln=object_property_length(light, "device:connected-devices:io");
-    for(int i=1; i<=ln; i++){
-      char* uid=object_property_get_n(light, "device:connected-devices:io", i);
-      if(!is_uid(uid)) continue;
-      object_property_set(light, "button", uid);
-      if(object_property_contains_peek(light, "button:is", "button")) break;
-    }
-  }
 #if defined(NRF5)
   if(object_property_is(light, "light", "on")){
 #if defined(BOARD_PCA10059)

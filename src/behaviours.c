@@ -7,8 +7,26 @@
 #include <onf.h>
 #include <onr.h>
 
+static bool discover_io_peer(object* o, char* property, char* is)
+{
+  char ispath[32]; snprintf(ispath, 32, "%s:is", property);
+
+  if(object_property_contains(o, ispath, is)) return true;
+
+  int ln=object_property_length(o, "device:connected-devices:io");
+  for(int i=1; i<=ln; i++){
+    char* uid=object_property_get_n(o, "device:connected-devices:io", i);
+    if(!is_uid(uid)) continue;
+    object_property_set(o, property, uid);
+
+    if(object_property_contains_peek(o, ispath, is)) return true;
+  }
+  return false;
+}
+
 bool evaluate_light_logic(object* o, void* d)
 {
+  if(!discover_io_peer(o, "button", "button")) return true;
   if(object_property_is(o, "button:state", "up"  )) object_property_set(o, "light", (char*)"off");
   if(object_property_is(o, "button:state", "down")) object_property_set(o, "light", (char*)"on");
   return true;
@@ -125,15 +143,7 @@ bool evaluate_device_logic(object* o, void* d)
 
 bool evaluate_clock_sync(object* o, void* d)
 {
-  if(!object_property_contains(o, "sync-clock:is", "clock")){
-    int ln=object_property_length(o, "device:connected-devices:io");
-    for(int i=1; i<=ln; i++){
-      char* uid=object_property_get_n(o, "device:connected-devices:io", i);
-      if(!is_uid(uid)) continue;
-      object_property_set(o, "sync-clock", uid);
-      if(object_property_contains_peek(o, "sync-clock:is", "clock")) break;
-    }
-  }
+  if(!discover_io_peer(o, "sync-clock", "clock")) return true;
   char* sync_clock_ts_str=object_property(o, "sync-clock:timestamp");
   if(sync_clock_ts_str && !object_property_is(o, "sync-ts", sync_clock_ts_str)){
     object_property_set(o, "sync-ts", sync_clock_ts_str);
