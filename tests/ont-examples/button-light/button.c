@@ -22,7 +22,7 @@ char* buttonuid;
 char* clockuid;
 
 void button_1_change_cb(int);
-bool evaluate_button(object* button, void* pressed);
+bool evaluate_button_io(object* button, void* pressed);
 
 static void every_second()
 {
@@ -53,7 +53,7 @@ int main()
 #endif
 
   onex_set_evaluators("evaluate_device", evaluate_device_logic, 0);
-  onex_set_evaluators("evaluate_button", evaluate_button, 0);
+  onex_set_evaluators("evaluate_button", evaluate_button_io, 0);
 #if defined(SYNC_TO_PEER_CLOCK)
   onex_set_evaluators("evaluate_clock",  evaluate_clock_sync, evaluate_clock, 0);
 #else
@@ -110,12 +110,12 @@ void button_1_change_cb(int button_pressed)
   onex_run_evaluators(buttonuid, (void*)(bool)button_pressed);
 }
 
-bool evaluate_button(object* button, void* pressed)
+bool evaluate_button_io(object* button, void* pressed)
 {
   char* s=(char*)(pressed? "down": "up");
   object_property_set(button, "state", s);
 #if !defined(NRF5)
-  log_write("evaluate_button: "); object_log(button);
+  log_write("evaluate_button_io: "); object_log(button);
 #endif
   return true;
 }

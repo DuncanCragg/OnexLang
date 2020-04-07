@@ -21,7 +21,7 @@
 char* lightuid;
 char* clockuid;
 
-bool evaluate_light(object* light, void* d);
+bool evaluate_light_io(object* light, void* d);
 
 static void every_second()
 {
@@ -51,7 +51,7 @@ int main()
 #endif
 
   onex_set_evaluators("evaluate_device", evaluate_device_logic, 0);
-  onex_set_evaluators("evaluate_light",  evaluate_light, 0);
+  onex_set_evaluators("evaluate_light",  evaluate_light_logic, evaluate_light_io, 0);
 #if defined(SYNC_TO_PEER_CLOCK)
   onex_set_evaluators("evaluate_clock",  evaluate_clock_sync, evaluate_clock, 0);
 #else
@@ -100,7 +100,7 @@ int main()
   }
 }
 
-bool evaluate_light(object* light, void* d)
+bool evaluate_light_io(object* light, void* d)
 {
   if(!object_property_contains(light, "button:is", "button")){
     int ln=object_property_length(light, "device:connected-devices:io");
@@ -111,28 +111,23 @@ bool evaluate_light(object* light, void* d)
       if(object_property_contains_peek(light, "button:is", "button")) break;
     }
   }
-  bool buttonpressed=object_property_is(light, "button:state", "down");
-  char* s=(char*)(buttonpressed? "on": "off");
-  if(!object_property_is(light, "light", s)){
-    object_property_set(light, "light", s);
 #if defined(NRF5)
-    if(buttonpressed){
+  if(object_property_is(light, "light", "on")){
 #if defined(BOARD_PCA10059)
-      gpio_set(LED2_B, 0);
+    gpio_set(LED2_B, LEDS_ACTIVE_STATE);
 #elif defined(BOARD_PINETIME)
-      gpio_set(LED_3, 0);
+    gpio_set(LED_3, LEDS_ACTIVE_STATE);
 #endif
-    } else {
+  } else {
 #if defined(BOARD_PCA10059)
-      gpio_set(LED2_B, 1);
+    gpio_set(LED2_B, !LEDS_ACTIVE_STATE);
 #elif defined(BOARD_PINETIME)
-      gpio_set(LED_3, 1);
-#endif
-    }
-#else
-    log_write("evaluate_light changed: "); object_log(light);
+    gpio_set(LED_3, !LEDS_ACTIVE_STATE);
 #endif
   }
+#else
+  log_write("evaluate_light_io changed: "); object_log(light);
+#endif
   return true;
 }
 
