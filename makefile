@@ -23,6 +23,14 @@ TESTS_OBJECTS = \
 ./tests/main.c \
 
 
+BUTTON_OBJECTS = \
+./tests/ont-examples/button-light/button.c \
+
+
+LIGHT_OBJECTS = \
+./tests/ont-examples/button-light/light.c \
+
+
 ############################################################################################
 
 libOnexLang.a: COMPILE_LINE=${LINUX_FLAGS} ${CC_FLAGS} $(LINUX_CC_SYMBOLS) ${INCLUDES}
@@ -46,6 +54,22 @@ tests.linux: CHANNELS=-DONP_CHANNEL_SERIAL
 tests.linux: libOnexLang.a ${TESTS_OBJECTS:.c=.o}
 	$(LD) ${TESTS_OBJECTS:.c=.o} -pthread -L. -lOnexLang -LOnexKernel -lOnexKernel -o $@
 
+button.linux: COMPILE_LINE=${LINUX_FLAGS} ${CC_FLAGS} $(LINUX_CC_SYMBOLS) ${INCLUDES}
+button.linux: CC=/usr/bin/gcc
+button.linux: LD=/usr/bin/gcc
+button.linux: TARGET=TARGET_LINUX
+button.linux: CHANNELS=-DONP_CHANNEL_SERIAL
+button.linux: libOnexLang.a ${BUTTON_OBJECTS:.c=.o}
+	$(LD) -static ${BUTTON_OBJECTS:.c=.o} -pthread -L. -lOnexLang -LOnexKernel -lOnexKernel -o $@
+
+light.linux: COMPILE_LINE=${LINUX_FLAGS} ${CC_FLAGS} $(LINUX_CC_SYMBOLS) ${INCLUDES}
+light.linux: CC=/usr/bin/gcc
+light.linux: LD=/usr/bin/gcc
+light.linux: TARGET=TARGET_LINUX
+light.linux: CHANNELS=-DONP_CHANNEL_SERIAL
+light.linux: libOnexLang.a ${LIGHT_OBJECTS:.c=.o}
+	$(LD) -static ${LIGHT_OBJECTS:.c=.o} -pthread -L. -lOnexLang -LOnexKernel -lOnexKernel -o $@
+
 #############################:
 
 linux.library: libOnexKernel.a
@@ -67,6 +91,12 @@ linux.tests: tests.linux
 
 linux.valgrind: tests.linux
 	valgrind --leak-check=yes --undef-value-errors=no ./tests.linux
+
+linux.button: button.linux
+	./button.linux
+
+linux.light: light.linux
+	./light.linux
 
 ############################################################################################
 
