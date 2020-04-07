@@ -52,6 +52,7 @@ NRF5_C_SOURCE_FILES = \
 ./OnexKernel/src/platforms/nRF5/serial.c \
 ./OnexKernel/src/platforms/nRF5/blenus.c \
 ./OnexKernel/src/platforms/nRF5/log.c \
+./OnexKernel/src/platforms/nRF5/channel-serial.c \
 
 
 # Source files common to all targets

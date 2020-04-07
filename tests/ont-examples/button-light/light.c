@@ -12,6 +12,7 @@
 #include <onex-kernel/time.h>
 #include <onex-kernel/log.h>
 #include <onf.h>
+#include <onr.h>
 
 #if defined(NRF5)
 #define SYNC_TO_PEER_CLOCK
@@ -25,65 +26,6 @@ bool evaluate_light(object* light, void* d);
 static void every_second()
 {
   onex_run_evaluators(clockuid, 0);
-}
-
-bool evaluate_clock(object* oclock, void* d)
-{
-#if defined(SYNC_TO_PEER_CLOCK)
-  if(!object_property_contains(oclock, "sync-clock:is", "clock")){
-    int ln=object_property_length(oclock, "device:connected-devices:io");
-    for(int i=1; i<=ln; i++){
-      char* uid=object_property_get_n(oclock, "device:connected-devices:io", i);
-      if(!is_uid(uid)) continue;
-      object_property_set(oclock, "sync-clock", uid);
-      if(object_property_contains_peek(oclock, "sync-clock:is", "clock")) break;
-    }
-  }
-  char* sync_clock_ts_str=object_property(oclock, "sync-clock:timestamp");
-  if(sync_clock_ts_str && !object_property_is(oclock, "sync-ts", sync_clock_ts_str)){
-    object_property_set(oclock, "sync-ts", sync_clock_ts_str);
-    char* e; uint64_t sync_clock_ts=strtoull(sync_clock_ts_str,&e,10);
-    if(sync_clock_ts) time_es_set(sync_clock_ts);
-  }
-#endif
-
-  uint64_t es=time_es();
-  char ess[16];
-#if defined(NRF5)
-  if(es>>32) snprintf(ess, 16, "%lu%lu", ((uint32_t)(es>>32)),(uint32_t)es);
-  else       snprintf(ess, 16,    "%lu",                      (uint32_t)es);
-#else
-  if(es>>32) snprintf(ess, 16, "%u%u", ((uint32_t)(es>>32)),(uint32_t)es);
-  else       snprintf(ess, 16,   "%u",                      (uint32_t)es);
-#endif
-
-  if(object_property_is(oclock, "timestamp", ess)) return true;
-
-  object_property_set(oclock, "timestamp", ess);
-
-  time_t est = (time_t)es;
-  struct tm* tms = localtime(&est);
-  char ts[32];
-
-  strftime(ts, 32, "%Y/%m/%d", tms);
-  object_property_set(oclock, "date", ts);
-
-  strftime(ts, 32, "%H:%M:%S", tms);
-  object_property_set(oclock, "time", ts);
-
-  return true;
-}
-
-// Copied from ONR Behaviours
-bool evaluate_device_logic(object* device, void* d)
-{
-  if(object_property_contains(device, (char*)"Alerted:is", (char*)"device")){
-    char* devuid=object_property(device, (char*)"Alerted");
-    if(!object_property_contains(device, (char*)"connected-devices", devuid)){
-      object_property_add(device, (char*)"connected-devices", devuid);
-    }
-  }
-  return true;
 }
 
 int main()
@@ -110,7 +52,11 @@ int main()
 
   onex_set_evaluators("evaluate_device", evaluate_device_logic, 0);
   onex_set_evaluators("evaluate_light",  evaluate_light, 0);
+#if defined(SYNC_TO_PEER_CLOCK)
+  onex_set_evaluators("evaluate_clock",  evaluate_clock_sync, evaluate_clock, 0);
+#else
   onex_set_evaluators("evaluate_clock",  evaluate_clock, 0);
+#endif
 
   object_set_evaluator(onex_device_object, (char*)"evaluate_device");
   char* deviceuid=object_property(onex_device_object, "UID");
