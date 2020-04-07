@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <onex-kernel/log.h>
+#include <onex-kernel/time.h>
 #include <items.h>
 #include <onr.h>
 
@@ -160,5 +161,34 @@ void run_device_tests()
   object_property_set(incomingdevice, "is", "device");
 
   onex_assert_equal(object_property(onex_device_object, "connected-devices"), "uid-incomingdevice", "device evaluator adds incoming device to connected-devices");
+}
+
+void run_clock_tests()
+{
+  log_write("------clock behaviour tests-----\n");
+
+  onex_set_evaluators("evaluate_clock",                           evaluate_clock, 0);
+  onex_set_evaluators("evaluate_clock_sync", evaluate_clock_sync, evaluate_clock, 0);
+
+  object* clock_synced_from=object_new(0, "evaluate_clock",      "clock event", 12);
+  object* clock_to_sync    =object_new(0, "evaluate_clock_sync", "clock event", 12);
+
+  char* clock_synced_from_uid=object_property(clock_synced_from, "UID");
+  char* clock_to_sync_uid    =object_property(clock_to_sync, "UID");
+
+  object_property_set(clock_to_sync, "sync-clock", clock_synced_from_uid);
+
+  time_es_set(12345678);
+
+  onex_run_evaluators(clock_synced_from_uid, 0);
+  onex_run_evaluators(clock_to_sync_uid, 0);
+
+  onex_assert_equal(object_property_values(clock_synced_from, "timestamp"), "12345678", "clock updates");
+  onex_assert_equal(object_property_values(clock_synced_from, "date"), "1970/05/23", "clock updates");
+  onex_assert_equal(object_property_values(clock_synced_from, "time"), "22:21:18", "clock updates");
+
+  onex_assert_equal(object_property_values(clock_to_sync, "timestamp"), "12345678", "clocks synced");
+  onex_assert_equal(object_property_values(clock_to_sync, "date"), "1970/05/23", "clocks synced");
+  onex_assert_equal(object_property_values(clock_to_sync, "time"), "22:21:18", "clocks synced");
 }
 
