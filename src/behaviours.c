@@ -21,6 +21,7 @@ static bool discover_io_peer(object* o, char* property, char* is)
 
     if(object_property_contains_peek(o, ispath, is)) return true;
   }
+  object_property_set(o, property, 0);
   return false;
 }
 
