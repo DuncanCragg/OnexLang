@@ -44,7 +44,7 @@ tests.linux: LD=/usr/bin/gcc
 tests.linux: TARGET=TARGET_LINUX
 tests.linux: CHANNELS=-DONP_CHANNEL_SERIAL
 tests.linux: libOnexLang.a ${TESTS_OBJECTS:.c=.o}
-	$(LD) ${TESTS_OBJECTS:.c=.o} -L. -lOnexLang -LOnexKernel -lOnexKernel -o $@
+	$(LD) ${TESTS_OBJECTS:.c=.o} -pthread -L. -lOnexLang -LOnexKernel -lOnexKernel -o $@
 
 #############################:
 

@@ -70,7 +70,7 @@ void run_evaluate_object_setter_tests()
   list_add(li, value_new("fig"));
   list_add(li, value_new("=>"));
   list_add(li, value_new("mango"));
-  properties_set(update, value_new("banana"), li);
+  properties_set(update, "banana", li);
 
   onex_run_evaluators(targetuid, update);
   onex_loop();
@@ -81,7 +81,7 @@ void run_evaluate_object_setter_tests()
   list_add(li, value_new("=>"));
   list_add(li, value_new("@."));
   list_add(li, value_new("orange"));
-  properties_set(update, value_new("banana"), li);
+  properties_set(update, "banana", li);
 
   onex_run_evaluators(targetuid, update);
   onex_loop();
@@ -92,7 +92,7 @@ void run_evaluate_object_setter_tests()
   list_add(li, value_new("=>"));
   list_add(li, value_new("@."));
   list_add(li, value_new("fig"));
-  properties_set(update, value_new("banana"), li);
+  properties_set(update, "banana", li);
 
   onex_run_evaluators(targetuid, update);
   onex_loop();
@@ -103,7 +103,7 @@ void run_evaluate_object_setter_tests()
   list_add(li, value_new("something"));
   list_add(li, value_new("(=>)"));
   list_add(li, value_new("something"));
-  properties_set(update, value_new("banana"), li);
+  properties_set(update, "banana", li);
 
   onex_run_evaluators(targetuid, update);
   onex_loop();
@@ -112,7 +112,7 @@ void run_evaluate_object_setter_tests()
   update = properties_new(3);
   li=list_new(3);
   list_add(li, value_new("=>"));
-  properties_set(update, value_new("banana"), li);
+  properties_set(update, "banana", li);
 
   onex_run_evaluators(targetuid, update);
   onex_loop();

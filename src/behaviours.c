@@ -15,7 +15,7 @@ void apply_update(object* o, properties* update)
 {
   uint16_t n=properties_size(update);
   for(int i=1; i<=n; i++){
-    value* key=properties_key_n(update, i);
+    char* key=properties_key_n(update, i);
     item* upd=properties_get_n(update, i);
     if(item_is_type(upd,ITEM_LIST)){
       list* li=(list*)upd;
@@ -24,13 +24,13 @@ void apply_update(object* o, properties* update)
       uint16_t arrowdel=list_find(li, (item*)value_new("(=>)"));
       if(arrow){
         if(arrow+1>s){
-          object_property_set(o, value_string(key), 0);
+          object_property_set(o, key, 0);
           continue;
         }
         if(arrow+1==s){
           item* r = list_get_n(li, arrow+1);
           if(item_is_type(r, ITEM_VALUE)){
-            object_property_set(o, value_string(key), value_string((value*)r));
+            object_property_set(o, key, value_string((value*)r));
           }
           continue;
         }
@@ -38,12 +38,12 @@ void apply_update(object* o, properties* update)
         item* r2 = list_get_n(li, arrow+2);
         if(item_is_type(r1, ITEM_VALUE) && item_is_type(r2, ITEM_VALUE)){
           if(item_equal(r1, value_new("@."))){
-            object_property_add(o, value_string(key), value_string((value*)r2));
+            object_property_add(o, key, value_string((value*)r2));
           }
         }
       }
       if(arrowdel){
-        char delkey[128]; snprintf(delkey, 128, "%s:%d", value_string(key), arrowdel);
+        char delkey[128]; snprintf(delkey, 128, "%s:%d", key, arrowdel);
         object_property_set(o, delkey, 0);
       }
     }
