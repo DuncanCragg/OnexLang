@@ -6,14 +6,14 @@ Make cleanlibs android.tests.lan
 Make clean linux.tests
 
 # edit makefile: tests
-make clean && make -j flash
+make clean && make -j flash0
 
 # edit makefile: button
-make clean && make -j flash
+make clean && make -j flash0
 Make clean linux.light
 
 # edit makefile: light
-make clean && make -j flash
+make clean && make -j flash0
 Make clean linux.button
 
 # tests on PineTime
