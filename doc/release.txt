@@ -1,20 +1,20 @@
 
-Make cleanlibs android.tests
+Make cleanlibs; Make android.tests
 ..or..
-Make cleanlibs android.tests.lan
+Make cleanlibs; Make android.tests.lan
 
-Make clean linux.tests
+Make clean; Make linux.tests
 
 # edit target: tests
 make clean && make -j flash0
 
 # edit target: button
 make clean && make -j flash0
-Make clean linux.light
+Make clean; Make linux.light
 
 # edit target: light
 make clean && make -j flash0
-Make clean linux.button
+Make clean; Make linux.button
 
 # tests on PineTime
 make -f makefile-s132 clean
