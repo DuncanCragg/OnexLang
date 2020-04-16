@@ -60,7 +60,7 @@ button.linux: LD=/usr/bin/gcc
 button.linux: TARGET=TARGET_LINUX
 button.linux: CHANNELS=-DONP_CHANNEL_SERIAL
 button.linux: libOnexLang.a ${BUTTON_OBJECTS:.c=.o}
-	$(LD) -static ${BUTTON_OBJECTS:.c=.o} -pthread -L. -lOnexLang -LOnexKernel -lOnexKernel -o $@
+	$(LD) ${BUTTON_OBJECTS:.c=.o} -pthread -L. -lOnexLang -LOnexKernel -lOnexKernel -o $@
 
 light.linux: COMPILE_LINE=${LINUX_FLAGS} ${CC_FLAGS} $(LINUX_CC_SYMBOLS) ${INCLUDES}
 light.linux: CC=/usr/bin/gcc
@@ -68,7 +68,7 @@ light.linux: LD=/usr/bin/gcc
 light.linux: TARGET=TARGET_LINUX
 light.linux: CHANNELS=-DONP_CHANNEL_SERIAL
 light.linux: libOnexLang.a ${LIGHT_OBJECTS:.c=.o}
-	$(LD) -static ${LIGHT_OBJECTS:.c=.o} -pthread -L. -lOnexLang -LOnexKernel -lOnexKernel -o $@
+	$(LD) ${LIGHT_OBJECTS:.c=.o} -pthread -L. -lOnexLang -LOnexKernel -lOnexKernel -o $@
 
 #############################:
 
