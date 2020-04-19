@@ -177,8 +177,11 @@ bool evaluate_clock(object* o, void* d)
   strftime(ts, 32, "%Y/%m/%d", tms);
   object_property_set(o, "date", ts);
 
-  strftime(ts, 32, "%H:%M:%S", tms);
+  strftime(ts, 32, "%H:%M", tms);
   object_property_set(o, "time", ts);
+
+  strftime(ts, 32, "%S", tms);
+  object_property_set(o, "seconds", ts);
 
   return true;
 }
