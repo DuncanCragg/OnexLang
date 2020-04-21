@@ -1,5 +1,6 @@
 #define _GNU_SOURCE
 #include <time.h>
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <onex-kernel/log.h>
@@ -151,7 +152,7 @@ bool evaluate_clock_sync(object* o, void* d)
     object_property_set(o, "sync-ts",  sync_ts);
     object_property_set(o, "tz",  object_property_values(o, "sync-clock:tz"));
     char* e; uint64_t sync_clock_ts=strtoull(sync_ts,&e,10);
-    if(sync_clock_ts) time_es_set(sync_clock_ts);
+    if(!*e && sync_clock_ts) time_es_set(sync_clock_ts);
   }
   return true;
 }
@@ -159,13 +160,19 @@ bool evaluate_clock_sync(object* o, void* d)
 bool evaluate_clock(object* o, void* d)
 {
   uint64_t es=time_es();
+
   char ess[16];
 #if defined(NRF5)
-  if(es>>32) snprintf(ess, 16, "%lu%lu", ((uint32_t)(es>>32)),(uint32_t)es);
-  else       snprintf(ess, 16,    "%lu",                      (uint32_t)es);
+  if(es>>32){
+    // sort this out in 2038
+    log_write("timestamp overflow\n");
+    uint32_t lo=es & 0xffffffff;
+    uint32_t hi=(es>>32);
+    snprintf(ess, 16, "%lu:%lu", hi, lo);
+  }
+  else snprintf(ess, 16, "%"PRIu32, (uint32_t)es);
 #else
-  if(es>>32) snprintf(ess, 16, "%u%u", ((uint32_t)(es>>32)),(uint32_t)es);
-  else       snprintf(ess, 16,   "%u",                      (uint32_t)es);
+  snprintf(ess, 16, "%"PRIu64, es);
 #endif
 
   if(object_property_is(o, "ts", ess)) return true;

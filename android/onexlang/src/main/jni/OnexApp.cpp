@@ -77,7 +77,7 @@ public:
     extern char* sprintExternalStorageDirectory(char* buf, int buflen, const char* format);
     char dbpath[128]; sprintExternalStorageDirectory(dbpath, 128, "%s/Onex/onex.ondb");
 
-    onex_init("");
+    onex_init((char*)"");
 
     run_light_tests();
     run_evaluate_object_setter_tests();

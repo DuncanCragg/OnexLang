@@ -5,18 +5,19 @@ Make cleanlibs; Make android.tests.lan
 
 Make clean; Make linux.tests
 
-# edit target: tests
+# edit target: TESTS
 make clean && make -j flash0
 
-# edit target: button
+# edit target: BUTTON
 make clean && make -j flash0
 Make clean; Make linux.light
 
-# edit target: light
+# edit target: LIGHT
 make clean && make -j flash0
 Make clean; Make linux.button
 
 # tests on PineTime
+# edit target: WATCH
 make -f makefile-s132 clean
 make -j -f makefile-s132
 oprg _build/onex.hex
