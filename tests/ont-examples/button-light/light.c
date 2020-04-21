@@ -67,9 +67,8 @@ int main()
   lightuid=object_property(light, "UID");
 
   object* oclock=object_new(0, "evaluate_clock", "clock event", 12);
-  object_property_set(oclock, "title", "OnexOS Clock");
-  object_property_set(oclock, "timezone", "GMT");
-  object_property_set(oclock, "daylight", "BST");
+  object_property_set(oclock, "title", "OnexOS Light Clock");
+  object_property_set(oclock, "ts", "%%unknown");
 #if defined(SYNC_TO_PEER_CLOCK)
   object_property_set(oclock, "device", deviceuid);
 #endif

@@ -79,9 +79,10 @@ void run_tests_maybe()
   run_clock_tests();
 
 #if defined(NRF5)
-  int failures=onex_assert_summary();
 #if defined(BOARD_PCA10059)
+  onex_assert_summary();
 #elif defined(BOARD_PINETIME)
+  int failures=onex_assert_summary();
   gfx_pos(10, 10);
   gfx_text(failures? "FAIL": "SUCCESS");
 #endif

@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
@@ -145,10 +146,11 @@ bool evaluate_device_logic(object* o, void* d)
 bool evaluate_clock_sync(object* o, void* d)
 {
   if(!discover_io_peer(o, "sync-clock", "clock")) return true;
-  char* sync_clock_ts_str=object_property(o, "sync-clock:timestamp");
-  if(sync_clock_ts_str && !object_property_is(o, "sync-ts", sync_clock_ts_str)){
-    object_property_set(o, "sync-ts", sync_clock_ts_str);
-    char* e; uint64_t sync_clock_ts=strtoull(sync_clock_ts_str,&e,10);
+  char* sync_ts=object_property(o, "sync-clock:ts");
+  if(sync_ts && !object_property_is(o, "sync-ts", sync_ts)){
+    object_property_set(o, "sync-ts",  sync_ts);
+    object_property_set(o, "tz",  object_property_values(o, "sync-clock:tz"));
+    char* e; uint64_t sync_clock_ts=strtoull(sync_ts,&e,10);
     if(sync_clock_ts) time_es_set(sync_clock_ts);
   }
   return true;
@@ -166,22 +168,17 @@ bool evaluate_clock(object* o, void* d)
   else       snprintf(ess, 16,   "%u",                      (uint32_t)es);
 #endif
 
-  if(object_property_is(o, "timestamp", ess)) return true;
+  if(object_property_is(o, "ts", ess)) return true;
 
-  object_property_set(o, "timestamp", ess);
+  object_property_set(o, "ts", ess);
 
+#if !defined(NRF5)
   time_t est = (time_t)es;
-  struct tm* tms = localtime(&est);
-  char ts[32];
-
-  strftime(ts, 32, "%Y/%m/%d", tms);
-  object_property_set(o, "date", ts);
-
-  strftime(ts, 32, "%H:%M", tms);
-  object_property_set(o, "time", ts);
-
-  strftime(ts, 32, "%S", tms);
-  object_property_set(o, "seconds", ts);
+  struct tm tms={0};
+  localtime_r(&est, &tms);
+  char t[32]; snprintf(t, 32, "%s %ld", tms.tm_zone, tms.tm_gmtoff);
+  object_property_set(o, "tz", t);
+#endif
 
   return true;
 }

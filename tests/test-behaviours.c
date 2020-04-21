@@ -176,6 +176,7 @@ void run_clock_tests()
   char* clock_synced_from_uid=object_property(clock_synced_from, "UID");
   char* clock_to_sync_uid    =object_property(clock_to_sync, "UID");
 
+  object_property_set(clock_synced_from, "tz", "GMT 0");
   object_property_set(clock_to_sync, "sync-clock", clock_synced_from_uid);
 
   time_es_set(12345678);
@@ -183,20 +184,14 @@ void run_clock_tests()
   onex_run_evaluators(clock_synced_from_uid, 0);
   onex_run_evaluators(clock_to_sync_uid, 0);
 
-  onex_assert_equal(object_property_values(clock_synced_from, "timestamp"), "12345678", "clock updates");
-  onex_assert_equal(object_property_values(clock_synced_from, "date"), "1970/05/23", "clock updates");
-#if defined(NRF5)
-  onex_assert_equal(object_property_values(clock_synced_from, "time"), "21:21:18", "clock updates");
-#else
-  onex_assert_equal(object_property_values(clock_synced_from, "time"), "22:21:18", "clock updates");
-#endif
 
-  onex_assert_equal(object_property_values(clock_to_sync, "timestamp"), "12345678", "clocks synced");
-  onex_assert_equal(object_property_values(clock_to_sync, "date"), "1970/05/23", "clocks synced");
+  onex_assert_equal(object_property_values(clock_synced_from, "ts"), "12345678", "clock updates");
+  onex_assert_equal(object_property_values(clock_to_sync, "sync-ts"), "12345678", "clocks synced");
 #if defined(NRF5)
-  onex_assert_equal(object_property_values(clock_to_sync, "time"), "21:21:18", "clocks synced");
+  onex_assert_equal(object_property_values(clock_to_sync, "tz"), "GMT 0", "timezone synced");
 #else
-  onex_assert_equal(object_property_values(clock_to_sync, "time"), "22:21:18", "clocks synced");
+  onex_assert_equal(object_property_values(clock_to_sync, "tz"), "BST 3600", "timezone synced (fix tests when GMT 0!)");
 #endif
+  onex_assert_equal(object_property_values(clock_to_sync, "ts"), "12345678", "clock synced or updates");
 }
 
