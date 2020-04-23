@@ -20,15 +20,18 @@ static bool discover_io_peer(object* o, char* property, char* is)
     char* uid=object_property_get_n(o, "device:connected-devices:io", i);
     if(!is_uid(uid)) continue;
     object_property_set(o, property, uid);
-
     if(object_property_contains_peek(o, ispath, is)) return true;
   }
-  object_property_set(o, property, 0);
+  if(ln) object_property_set(o, property, 0);
   return false;
 }
 
 bool evaluate_light_logic(object* o, void* d)
 {
+  if(object_property(o, "touch:is")){
+    object_property_set(o, "light", (char*)"on");
+    return true;
+  }
   if(!discover_io_peer(o, "button", "button")) return true;
   if(object_property_is(o, "button:state", "up"  )) object_property_set(o, "light", (char*)"off");
   if(object_property_is(o, "button:state", "down")) object_property_set(o, "light", (char*)"on");
