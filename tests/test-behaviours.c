@@ -48,12 +48,15 @@ void run_light_tests()
 
   onex_run_evaluators(lightuid, 0);
 
+  onex_loop();
   bool button_pressed=false;
   onex_run_evaluators(buttonuid, (void*)button_pressed);
 
+  onex_loop();
   button_pressed=true;
   onex_run_evaluators(buttonuid, (void*)button_pressed);
 
+  onex_loop();
   onex_assert_equal_num(evaluate_button_io_called, 2,  "evaluate_button_io was called");
   onex_assert_equal_num(evaluate_light_io_called, 3,  "evaluate_light_io was called");
 }
@@ -134,18 +137,23 @@ void run_evaluate_edit_rule_tests()
   object_property_add(edit, (char*)"Notifying", targetuid);
 
   object_property_set(edit, "banana", "=> mango");
+  onex_loop();
   onex_assert_equal(object_property_values(target, "banana"), "mango",            "evaluate_edit_rule set banana to 'mango'");
 
   object_property_set(edit, "banana", "=> @. orange");
+  onex_loop();
   onex_assert_equal(object_property_values(target, "banana"), "mango orange",     "evaluate_edit_rule set banana to 'mango orange'");
 
   object_property_set(edit, "banana", "=> @. fig");
+  onex_loop();
   onex_assert_equal(object_property_values(target, "banana"), "mango orange fig", "evaluate_edit_rule set banana to 'mango orange fig'");
 
   object_property_set(edit, "banana", "something (=>) something");
+  onex_loop();
   onex_assert_equal(object_property_values(target, "banana"), "mango fig",        "evaluate_edit_rule set banana to 'mango fig'");
 
   object_property_set(edit, "banana", "=>");
+  onex_loop();
   onex_assert(     !object_property_values(target, "banana"),                     "evaluate_edit_rule set banana to nothing");
 }
 
@@ -160,6 +168,7 @@ void run_device_tests()
   object_property(onex_device_object, "incoming:UID");
   object* incomingdevice=onex_get_from_cache("uid-incomingdevice");
   object_property_set(incomingdevice, "is", "device");
+  onex_loop();
 
   onex_assert_equal(object_property(onex_device_object, "connected-devices"), "uid-incomingdevice", "device evaluator adds incoming device to connected-devices");
 }
@@ -185,9 +194,11 @@ void run_clock_tests()
   onex_run_evaluators(clock_synced_from_uid, 0);
   onex_run_evaluators(clock_to_sync_uid, 0);
 
+  onex_loop();
   onex_assert_equal(object_property(clock_synced_from, "ts"), "12345555", "clock updates");
 
   object_property_set(clock_synced_from, "ts", "12345678");
+  onex_loop();
 
   onex_assert_equal_num(time_es(), 12345678, "epoch clock set");
 
