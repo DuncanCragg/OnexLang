@@ -33,8 +33,8 @@ bool evaluate_light_logic(object* o, void* d)
     return true;
   }
   if(!discover_io_peer(o, "button", "button")) return true;
-  if(object_property_is(o, "button:state", "up"  )) object_property_set(o, "light", (char*)"off");
-  if(object_property_is(o, "button:state", "down")) object_property_set(o, "light", (char*)"on");
+  if(object_property_is(o, "button:state", "up"  )) object_property_set(o, "light", "off");
+  if(object_property_is(o, "button:state", "down")) object_property_set(o, "light", "on");
   return true;
 }
 
@@ -128,8 +128,8 @@ void apply_edit(object* o)
 
 bool evaluate_edit_rule(object* o, void* d)
 {
-  if(object_property_contains(o, (char*)"Alerted:is", (char*)"edit") &&
-     object_property_contains(o, (char*)"Alerted:is", (char*)"rule")   ){
+  if(object_property_contains(o, "Alerted:is", "edit") &&
+     object_property_contains(o, "Alerted:is", "rule")   ){
 
     apply_edit(o);
   }
@@ -138,10 +138,10 @@ bool evaluate_edit_rule(object* o, void* d)
 
 bool evaluate_device_logic(object* o, void* d)
 {
-  if(object_property_contains(o, (char*)"Alerted:is", (char*)"device")){
-    char* devuid=object_property(o, (char*)"Alerted");
-    if(!object_property_contains(o, (char*)"connected-devices", devuid)){
-      object_property_add(o, (char*)"connected-devices", devuid);
+  if(object_property_contains(o, "Alerted:is", "device")){
+    char* devuid=object_property(o, "Alerted");
+    if(!object_property_contains(o, "connected-devices", devuid)){
+      object_property_add(o, "connected-devices", devuid);
     }
   }
   return true;
