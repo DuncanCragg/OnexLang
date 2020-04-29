@@ -28,8 +28,14 @@ static bool discover_io_peer(object* o, char* property, char* is)
 
 bool evaluate_light_logic(object* o, void* d)
 {
-  if(object_property(o, "touch:is")){
-    object_property_set(o, "light", (char*)"on");
+  if(object_property_is(o, "touch:action:1", "02")){  // will need to be a symbol
+    object_property_set(o, "Timer", "5000");
+    object_property_set(o, "light", "on");
+    return true;
+  }
+  if(object_property_is(o, "Timer", "0")){
+    object_property_set(o, "Timer", "");
+    object_property_set(o, "light", "off");
     return true;
   }
   if(!discover_io_peer(o, "button", "button")) return true;
