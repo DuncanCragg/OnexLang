@@ -53,9 +53,11 @@ void run_light_tests()
   onex_run_evaluators(buttonuid, (void*)button_pressed);
 
   onex_loop();
+  onex_loop();
   button_pressed=true;
   onex_run_evaluators(buttonuid, (void*)button_pressed);
 
+  onex_loop();
   onex_loop();
   onex_assert_equal_num(evaluate_button_io_called, 2,  "evaluate_button_io was called");
   onex_assert_equal_num(evaluate_light_io_called, 3,  "evaluate_light_io was called");
@@ -79,6 +81,7 @@ void run_evaluate_object_setter_tests()
 
   onex_run_evaluators(targetuid, update);
   onex_loop();
+  onex_loop();
   onex_assert_equal(object_property(target, "banana"), "mango", "evaluate_object_setter set banana to mango");
 
   update = properties_new(3);
@@ -89,6 +92,7 @@ void run_evaluate_object_setter_tests()
   properties_set(update, "banana", li);
 
   onex_run_evaluators(targetuid, update);
+  onex_loop();
   onex_loop();
   onex_assert_equal(object_property_values(target, "banana"), "mango orange", "evaluate_object_setter set banana to 'mango orange'");
 
@@ -101,6 +105,7 @@ void run_evaluate_object_setter_tests()
 
   onex_run_evaluators(targetuid, update);
   onex_loop();
+  onex_loop();
   onex_assert_equal(object_property_values(target, "banana"), "mango orange fig", "evaluate_object_setter set banana to 'mango orange fig'");
 
   update = properties_new(3);
@@ -112,6 +117,7 @@ void run_evaluate_object_setter_tests()
 
   onex_run_evaluators(targetuid, update);
   onex_loop();
+  onex_loop();
   onex_assert_equal(object_property_values(target, "banana"), "mango fig", "evaluate_object_setter set banana to 'mango fig'");
 
   update = properties_new(3);
@@ -120,6 +126,7 @@ void run_evaluate_object_setter_tests()
   properties_set(update, "banana", li);
 
   onex_run_evaluators(targetuid, update);
+  onex_loop();
   onex_loop();
   onex_assert(     !object_property_values(target, "banana"),              "evaluate_object_setter set banana to empty");
 }
