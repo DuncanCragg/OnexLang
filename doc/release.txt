@@ -7,13 +7,16 @@ Make clean; Make linux.tests
 
 # edit target: TESTS
 make clean && make -j flash0
+make clean && make -j flash1
 
 # edit target: BUTTON
 make clean && make -j flash0
+make clean && make -j flash1
 Make clean; Make linux.light
 
 # edit target: LIGHT
 make clean && make -j flash0
+make clean && make -j flash1
 Make clean; Make linux.button
 
 # tests on PineTime
