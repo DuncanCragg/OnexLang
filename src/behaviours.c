@@ -28,19 +28,23 @@ static bool discover_io_peer(object* o, char* property, char* is)
 
 bool evaluate_light_logic(object* o, void* d)
 {
-  if(object_property_is(o, "touch:action:1", "02")){  // will need to be a symbol
-    object_property_set(o, "Timer", "5000");
-    object_property_set(o, "light", "on");
-    return true;
-  }
   if(object_property_is(o, "Timer", "0")){
     object_property_set(o, "Timer", "");
     object_property_set(o, "light", "off");
     return true;
   }
-  if(!discover_io_peer(o, "button", "button")) return true;
-  if(object_property_is(o, "button:state", "up"  )) object_property_set(o, "light", "off");
-  if(object_property_is(o, "button:state", "down")) object_property_set(o, "light", "on");
+  if(object_property_is(o, "touch:action:1", "down") ||
+     object_property_is(o, "button:state",   "down")   ){
+    object_property_set(o, "light", "on");
+  }
+  if(object_property_is(o, "light", "on")){
+    char* timeout=object_property(o, "timeout");
+    if(timeout) object_property_set(o, "Timer", timeout);
+  }
+  if(!object_property(o, "touch:is")){
+    if(!discover_io_peer(o, "button", "button")) return true;
+    if(object_property_is(o, "button:state", "up"  )) object_property_set(o, "light", "off");
+  }
   return true;
 }
 
