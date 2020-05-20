@@ -33,17 +33,22 @@ bool evaluate_light_logic(object* o, void* d)
     object_property_set(o, "light", "off");
     return true;
   }
-  if(object_property_is(o, "touch:action:1", "down") ||
-     object_property_is(o, "button:state",   "down")   ){
+  if(object_property_is(o, "button:state",   "down") ||
+     object_property_is(o, "touch:action:1", "down") ||
+     object_property_is(o, "motion:gesture", "view-screen")){
     object_property_set(o, "light", "on");
   }
   if(object_property_is(o, "light", "on")){
     char* timeout=object_property(o, "timeout");
-    if(timeout) object_property_set(o, "Timer", timeout);
+    if(!timeout) timeout="2000";
+    object_property_set(o, "Timer", timeout);
   }
-  if(!object_property(o, "touch:is")){
+  if(!object_property(o, "touch:is") &&
+     !object_property(o, "motion:is")   ){
     if(!discover_io_peer(o, "button", "button")) return true;
-    if(object_property_is(o, "button:state", "up"  )) object_property_set(o, "light", "off");
+    if(object_property_is(o, "button:state", "up"  )){
+      object_property_set(o, "light", "off");
+    }
   }
   return true;
 }
