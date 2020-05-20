@@ -38,7 +38,8 @@ bool evaluate_light_logic(object* o, void* d)
      object_property_is(o, "motion:gesture", "view-screen")){
     object_property_set(o, "light", "on");
   }
-  if(object_property_is(o, "light", "on")){
+  if( object_property_is(o, "light", "on") &&
+     !object_property(o, "Timer")             )  {
     char* timeout=object_property(o, "timeout");
     if(!timeout) timeout="2000";
     object_property_set(o, "Timer", timeout);
