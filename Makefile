@@ -72,7 +72,7 @@ light.linux: libOnexLang.a ${LIGHT_OBJECTS:.c=.o}
 
 #############################:
 
-linux.library: libOnexKernel.a
+linux.library: libOnexLang.a
 
 android.library: libOnexAndroidLang.a
 
