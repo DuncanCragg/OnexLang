@@ -44,7 +44,7 @@ libOnexLang.a: $(C_SOURCE_FILES:.c=.o)
 
 libOnexAndroidLang.a: android/onexlang/src/main/jni/OnexApp.cpp
 	(cd android; ./gradlew build)
-	cp android/onexlang/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/libOnexAndroidLang.a .
+	cp android/onexlang/build/intermediates/ndkBuild/debug/obj/local/arm64-v8a/libOnexAndroidLang.a .
 
 tests.linux: COMPILE_LINE=${LINUX_FLAGS} ${CC_FLAGS} $(LINUX_CC_SYMBOLS) ${INCLUDES}
 tests.linux: CC=/usr/bin/gcc

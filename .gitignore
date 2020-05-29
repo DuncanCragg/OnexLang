@@ -3,7 +3,7 @@ doc/local
 android/doc
 ,*
 build/
-ndkBuild/
+.cxx/
 .gradle
 local.properties
 *.o
