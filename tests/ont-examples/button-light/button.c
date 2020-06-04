@@ -21,13 +21,14 @@
 char* buttonuid;
 char* clockuid;
 
-static volatile bool event_tick_sec=false;
-static volatile bool event_button=false;
-
 static volatile bool button_pressed=false;
 
-static void every_second(){        event_tick_sec=true; }
-static void button_changed(int p){ event_button=true; button_pressed=p; }
+static void every_second(){ onex_run_evaluators(clockuid, 0); }
+
+static void button_changed(uint8_t pin, uint8_t type){
+  button_pressed=(gpio_get(pin)==BUTTONS_ACTIVE_STATE);
+  onex_run_evaluators(buttonuid, (void*)button_pressed);
+}
 
 bool evaluate_button_io(object* button, void* pressed);
 
@@ -45,9 +46,9 @@ int main()
   onex_init("");
 
 #if defined(BOARD_PCA10059)
-  gpio_mode_cb(BUTTON_1, INPUT_PULLUP, button_changed);
+  gpio_mode_cb(BUTTON_1, INPUT_PULLUP, RISING_AND_FALLING, button_changed);
 #elif defined(BOARD_PINETIME)
-  gpio_mode_cb(BUTTON_1, INPUT_PULLDOWN, button_changed);
+  gpio_mode_cb(BUTTON_1, INPUT_PULLDOWN, RISING_AND_FALLING, button_changed);
   gpio_mode(   BUTTON_ENABLE, OUTPUT);
   gpio_set(    BUTTON_ENABLE, 1);
 #else
@@ -91,15 +92,6 @@ int main()
   while(1){
 
     onex_loop();
-
-    if(event_tick_sec){
-      event_tick_sec=false;
-      onex_run_evaluators(clockuid, 0);
-    }
-    if(event_button){
-      event_button=false;
-      onex_run_evaluators(buttonuid, (void*)button_pressed);
-    }
 
 #if !defined(NRF5)
     if(time_ms() > lasttime+1200u){
