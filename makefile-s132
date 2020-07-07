@@ -48,9 +48,11 @@ NRF5_C_SOURCE_FILES = \
 ./OnexKernel/src/platforms/nRF5/time.c \
 ./OnexKernel/src/platforms/nRF5/random.c \
 ./OnexKernel/src/platforms/nRF5/gpio.c \
-./OnexKernel/src/platforms/nRF5/touch.c \
+./OnexKernel/src/platforms/nRF5/touch-cst816s.c \
 ./OnexKernel/src/platforms/nRF5/blenus.c \
 ./OnexKernel/src/platforms/nRF5/log.c \
+./OnexKernel/src/platforms/nRF5/spi.c \
+./OnexKernel/src/platforms/nRF5/display-st7789.c \
 ./OnexKernel/src/platforms/nRF5/gfx.c \
 ./OnexKernel/src/platforms/nRF5/channel-serial.c \
 
@@ -58,8 +60,6 @@ NRF5_C_SOURCE_FILES = \
 # Source files common to all targets
 SRC_FILES += \
   $(SDK_ROOT)/modules/nrfx/mdk/gcc_startup_nrf52.S \
-  $(SDK_ROOT)/components/drivers_ext/st7789/st7789.c \
-  $(SDK_ROOT)/components/drivers_ext/st7789/spi_master_fast.c \
   $(SDK_ROOT)/components/libraries/gfx/nrf_gfx.c \
   $(SDK_ROOT)/external/thedotfactory_fonts/orkney24pts.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_twi.c \
@@ -365,7 +365,7 @@ flash_softdevice:
 erase:
 	nrfjprog -f nrf52 --eraseall
 
-SDK_CONFIG_FILE := ./src/platforms/nRF5/s132/sdk_config.h
+SDK_CONFIG_FILE := OnexKernel/src/platforms/nRF5/s132/sdk_config.h
 CMSIS_CONFIG_TOOL := $(SDK_ROOT)/external_tools/cmsisconfig/CMSIS_Configuration_Wizard.jar
 sdk_config:
 	java -jar $(CMSIS_CONFIG_TOOL) $(SDK_CONFIG_FILE)
