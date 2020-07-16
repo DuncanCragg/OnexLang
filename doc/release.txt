@@ -23,5 +23,5 @@ Make clean; Make linux.button
 # edit target: WATCH
 make -f makefile-s132 clean
 make -j -f makefile-s132
-oprg _build/onex.hex
+make -j -f makefile-s132 flash
 
