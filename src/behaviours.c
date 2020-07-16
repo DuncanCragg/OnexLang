@@ -20,7 +20,7 @@ static bool discover_io_peer(object* o, char* property, char* is)
     char* uid=object_property_get_n(o, "device:connected-devices:io", i);
     if(!is_uid(uid)) continue;
     object_property_set(o, property, uid);
-    if(object_property_contains_peek(o, ispath, is)) return true;
+    if(object_property_contains(o, ispath, is)) return true;
   }
   if(ln) object_property_set(o, property, 0);
   return false;
