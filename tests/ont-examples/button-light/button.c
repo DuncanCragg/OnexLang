@@ -23,12 +23,17 @@ char* clockuid;
 
 static volatile bool button_pressed=false;
 
-static void every_second(){ onex_run_evaluators(clockuid, 0); }
+static void every_second()
+{
+  onex_run_evaluators(clockuid, 0);
+}
 
+#if defined(NRF5)
 static void button_changed(uint8_t pin, uint8_t type){
   button_pressed=(gpio_get(pin)==BUTTONS_ACTIVE_STATE);
   onex_run_evaluators(buttonuid, (void*)button_pressed);
 }
+#endif
 
 bool evaluate_button_io(object* button, void* pressed);
 
@@ -41,7 +46,7 @@ int main()
 #if defined(HAS_SERIAL)
   serial_init(0,0);
 #endif
-  blenus_init(0);
+  blenus_init(0,0);
 #endif
   onex_init("");
 

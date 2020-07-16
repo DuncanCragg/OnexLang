@@ -78,12 +78,12 @@ android.library: libOnexAndroidLang.a
 
 android.tests: android.library
 	adb -d uninstall network.object.onexlang || echo not found
-	adb -d install android/onexlang/build/outputs/apk/onexlang-debug.apk
+	adb -d install android/onexlang/build/outputs/apk/debug/onexlang-debug.apk
 	adb logcat OnexApp:D *:S
 
 android.tests.lan: android.library
 	adb uninstall network.object.onexlang || echo not found
-	adb install android/onexlang/build/outputs/apk/onexlang-debug.apk
+	adb install android/onexlang/build/outputs/apk/debug/onexlang-debug.apk
 	adb logcat OnexApp:D *:S
 
 linux.tests: tests.linux

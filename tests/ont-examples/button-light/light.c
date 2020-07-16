@@ -37,7 +37,7 @@ int main()
 #if defined(HAS_SERIAL)
   serial_init(0,0);
 #endif
-  blenus_init(0);
+  blenus_init(0,0);
 #endif
   onex_init("");
 
@@ -77,23 +77,16 @@ int main()
   object_property_add(onex_device_object, (char*)"io", lightuid);
   object_property_add(onex_device_object, (char*)"io", clockuid);
 
+  onex_run_evaluators(lightuid, 0);
   time_ticker(every_second, 1000);
 
 #if defined(BOARD_PCA10059)
-  gpio_set(LED1_G, 0);
-  gpio_set(LED2_B, 1);
+  gpio_set(LED1_G,  LEDS_ACTIVE_STATE);
+  gpio_set(LED2_B, !LEDS_ACTIVE_STATE);
 #elif defined(BOARD_PINETIME)
-  gpio_set(LED_3, 1);
+  gpio_set(LED_3, !LEDS_ACTIVE_STATE);
 #endif
-  uint16_t todo=0;
-  while(1){
-
-    onex_loop();
-
-    if(todo<2 && time_ms() >1000u+2000u*todo){  todo++;
-      onex_run_evaluators(lightuid, 0);
-    }
-  }
+  while(1) onex_loop();
 }
 
 bool evaluate_light_io(object* light, void* d)

@@ -40,7 +40,7 @@ int main(void)
   gpio_init();
 #if defined(HAS_SERIAL)
   serial_init((serial_recv_cb)on_recv,0);
-  blenus_init(0);
+  blenus_init(0,0);
   time_ticker((void (*)())serial_loop, 1);
 #else
   blenus_init((blenus_recv_cb)on_recv);
