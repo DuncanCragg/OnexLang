@@ -13,8 +13,9 @@ uint8_t evaluate_button_io_called=0;
 bool evaluate_button_io(object* button, void* pressed)
 {
   evaluate_button_io_called++;
-  if(evaluate_button_io_called==1) onex_assert(!pressed, "evaluate_button_io arg is false the first time");
-  if(evaluate_button_io_called==2) onex_assert(!!pressed, "evaluate_button_io arg is true the second time");
+  if(evaluate_button_io_called==1) onex_assert( !pressed, "evaluate_button_io arg is false the 1st time");
+  if(evaluate_button_io_called==2) onex_assert(!!pressed, "evaluate_button_io arg is true  the 2nd time");
+  if(evaluate_button_io_called==3) onex_assert( !pressed, "evaluate_button_io arg is false the 3rd time");
   char* s=(char*)(pressed? "down": "up");
   object_property_set(button, "state", s);
   return true;
@@ -24,9 +25,9 @@ uint8_t evaluate_light_io_called=0;
 bool evaluate_light_io(object* light, void* d)
 {
   evaluate_light_io_called++;
-  if(evaluate_light_io_called==1) onex_assert(object_property_is(light, "light", "off"), "evaluate_light_io light is off the first time");
-  if(evaluate_light_io_called==2) onex_assert(object_property_is(light, "light", "off"), "evaluate_light_io light is off the second time");
-  if(evaluate_light_io_called==3) onex_assert(object_property_is(light, "light", "on"),  "evaluate_light_io light is on the third time");
+  if(evaluate_light_io_called==1) onex_assert(object_property_is(light, "light", "off"), "evaluate_light_io light is off the 1st time");
+  if(evaluate_light_io_called==2) onex_assert(object_property_is(light, "light", "on"),  "evaluate_light_io light is on  the 2nd time");
+  if(evaluate_light_io_called==3) onex_assert(object_property_is(light, "light", "off"), "evaluate_light_io light is off the 3rd time");
   return true;
 }
 
@@ -43,7 +44,7 @@ void run_light_tests()
   char* buttonuid=object_property(button, "UID");
   char* lightuid=object_property(light, "UID");
 
-  object_property_set(light, "light", "off");
+  object_property_set(light, "light", "on");
   object_property_set(light, "button", buttonuid);
 
   onex_run_evaluators(lightuid, 0);
@@ -59,8 +60,18 @@ void run_light_tests()
 
   onex_loop();
   onex_loop();
-  onex_assert_equal_num(evaluate_button_io_called, 2,  "evaluate_button_io was called");
-  onex_assert_equal_num(evaluate_light_io_called, 3,  "evaluate_light_io was called");
+  button_pressed=false;
+  onex_run_evaluators(buttonuid, (void*)button_pressed);
+
+  onex_loop();
+  onex_loop();
+  button_pressed=false;
+  onex_run_evaluators(buttonuid, (void*)button_pressed);
+
+  onex_loop();
+  onex_loop();
+  onex_assert_equal_num(evaluate_button_io_called, 4,  "evaluate_button_io was called four times");
+  onex_assert_equal_num(evaluate_light_io_called,  3,  "evaluate_light_io  was called only three times because evaluate_light_logic did not see a change");
 }
 
 void run_evaluate_object_setter_tests()

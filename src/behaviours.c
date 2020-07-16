@@ -28,30 +28,48 @@ static bool discover_io_peer(object* o, char* property, char* is)
 
 bool evaluate_light_logic(object* o, void* d)
 {
-  if(object_property_is(o, "Timer", "0")){
+  bool light_on=object_property_is(o, "light", "on");
+
+  if(light_on && object_property_is(o, "Timer", "0")){
+
     object_property_set(o, "Timer", "");
     object_property_set(o, "light", "off");
+
     return true;
   }
-  if(object_property_is(o, "button:state",   "down") ||
-     object_property_is(o, "touch:action:1", "down") ||
-     object_property_is(o, "motion:gesture", "view-screen")){
+
+  bool changed=false;
+
+  if(!light_on && (
+       object_property_is(o, "button:state",   "down") ||
+       object_property_is(o, "touch:action:1", "down") ||
+       object_property_is(o, "motion:gesture", "view-screen"))){
+
+    light_on=true;
     object_property_set(o, "light", "on");
+    changed=true;
   }
-  if( object_property_is(o, "light", "on") &&
-     !object_property(o, "Timer")             )  {
+
+  if(light_on && !object_property(o, "Timer"))  {
+
     char* timeout=object_property(o, "timeout");
-    if(!timeout) timeout="2000";
-    object_property_set(o, "Timer", timeout);
-  }
-  if(!object_property(o, "touch:is") &&
-     !object_property(o, "motion:is")   ){
-    if(!discover_io_peer(o, "button", "button")) return true;
-    if(object_property_is(o, "button:state", "up"  )){
-      object_property_set(o, "light", "off");
+    if(timeout){
+      object_property_set(o, "Timer", timeout);
+      changed=true;
     }
   }
-  return true;
+
+  if(object_property(o, "touch:is") ||
+     object_property(o, "motion:is")   ) return changed;
+
+  if(!discover_io_peer(o, "button", "button")) return changed;
+
+  if(light_on && object_property_is(o, "button:state", "up")){
+
+    object_property_set(o, "light", "off");
+    changed=true;
+  }
+  return changed;
 }
 
 void apply_update(object* o, properties* update)
