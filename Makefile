@@ -119,7 +119,7 @@ clean:
 
 cleanx: clean
 	rm -f *.linux
-	rm -rf android/build android/*/build android/*/.externalNativeBuild/ android/.gradle/*/*
+	rm -rf android/*/build android/*/.cxx/ android/.gradle/*/*
 
 cleanlibs: cleanx
 	rm -f libOnex*.a
