@@ -1,13 +1,13 @@
 
-PROJECT_NAME     := onex
-TARGETS          := onex
+PROJECT_NAME     := onex-lang
+TARGETS          := onex-lang
 OUTPUT_DIRECTORY := _build
 VERBOSE = 1
 PRETTY  = 1
 
 SDK_ROOT := ./sdk
 
-$(OUTPUT_DIRECTORY)/onex.out: \
+$(OUTPUT_DIRECTORY)/onex-lang.out: \
   LINKER_SCRIPT  := ../OnexKernel/src/platforms/nRF5/onex.ld
 
 
@@ -232,10 +232,10 @@ LDFLAGS += -Wl,--gc-sections
 # use newlib in nano version
 LDFLAGS += --specs=nano.specs
 
-onex: CFLAGS += -D__HEAP_SIZE=8192
-onex: CFLAGS += -D__STACK_SIZE=8192
-onex: ASMFLAGS += -D__HEAP_SIZE=8192
-onex: ASMFLAGS += -D__STACK_SIZE=8192
+onex-lang: CFLAGS += -D__HEAP_SIZE=8192
+onex-lang: CFLAGS += -D__STACK_SIZE=8192
+onex-lang: ASMFLAGS += -D__HEAP_SIZE=8192
+onex-lang: ASMFLAGS += -D__STACK_SIZE=8192
 
 # Add standard libraries at the very end of the linker input, after all objects
 # that may need symbols provided by these libraries.
@@ -245,19 +245,19 @@ LIB_FILES += -lc -lnosys -lm
 .PHONY: default help
 
 # Default target - first one defined
-default: onex
+default: onex-lang
 
-test: onex
-	rm $(OUTPUT_DIRECTORY)/onex.hex
-	ar x ../OnexKernel/libonex-kernel-nrf.a --output _build/onex
-	$(CC) -O3 -g3 -mthumb -mabi=aapcs -L./sdk/modules/nrfx/mdk -T../OnexKernel/src/platforms/nRF5/onex.ld -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,--gc-sections --specs=nano.specs _build/onex/*.o -o _build/onex.out
-	$(OBJCOPY) -O ihex _build/onex.out _build/onex.hex
+test: onex-lang
+	rm $(OUTPUT_DIRECTORY)/onex-lang.hex
+	ar x ../OnexKernel/libonex-kernel-nrf.a --output _build/onex-lang
+	$(CC) -O3 -g3 -mthumb -mabi=aapcs -L./sdk/modules/nrfx/mdk -T../OnexKernel/src/platforms/nRF5/onex.ld -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,--gc-sections --specs=nano.specs _build/onex-lang/*.o -o _build/onex-lang.out
+	$(OBJCOPY) -O ihex _build/onex-lang.out _build/onex-lang.hex
 
-$(OUTPUT_DIRECTORY)/onex/*.o: onex
+$(OUTPUT_DIRECTORY)/onex-lang/*.o: onex-lang
 
-libonex-lang-nrf.a: $(OUTPUT_DIRECTORY)/onex/*.o
-	rm $(OUTPUT_DIRECTORY)/onex/main.c.o
-	rm $(OUTPUT_DIRECTORY)/onex/test-*.c.o
+libonex-lang-nrf.a: $(OUTPUT_DIRECTORY)/onex-lang/*.o
+	rm $(OUTPUT_DIRECTORY)/onex-lang/main.c.o
+	rm $(OUTPUT_DIRECTORY)/onex-lang/test-*.c.o
 	$(AR) rcs $@ $^
 
 nrf.lib: libonex-lang-nrf.a
@@ -266,7 +266,7 @@ nrf.lib: libonex-lang-nrf.a
 # Print all targets that can be built
 help:
 	@echo following targets are available:
-	@echo		onex
+	@echo		onex-lang
 	@echo		flash_softdevice
 	@echo		sdk_config - starting external tool for editing sdk_config.h
 	@echo		flash      - flashing binary
@@ -285,13 +285,13 @@ PRIVATE_PEM = ~/the-u-web/OnexKernel/doc/local/private.pem
 
 # Flash the program
 flash0: default
-	@echo Flashing: $(OUTPUT_DIRECTORY)/onex.hex
-	nrfutil pkg generate --hw-version 52 --sd-req 0xCA --application-version 1 --application _build/onex.hex --key-file $(PRIVATE_PEM) dfu.zip
+	@echo Flashing: $(OUTPUT_DIRECTORY)/onex-lang.hex
+	nrfutil pkg generate --hw-version 52 --sd-req 0xCA --application-version 1 --application _build/onex-lang.hex --key-file $(PRIVATE_PEM) dfu.zip
 	nrfutil dfu usb-serial -pkg dfu.zip -p /dev/ttyACM0 -b 115200
 
 flash1: default
-	@echo Flashing: $(OUTPUT_DIRECTORY)/onex.hex
-	nrfutil pkg generate --hw-version 52 --sd-req 0xCA --application-version 1 --application _build/onex.hex --key-file $(PRIVATE_PEM) dfu.zip
+	@echo Flashing: $(OUTPUT_DIRECTORY)/onex-lang.hex
+	nrfutil pkg generate --hw-version 52 --sd-req 0xCA --application-version 1 --application _build/onex-lang.hex --key-file $(PRIVATE_PEM) dfu.zip
 	nrfutil dfu usb-serial -pkg dfu.zip -p /dev/ttyACM1 -b 115200
 
 # Flash softdevice
