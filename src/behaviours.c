@@ -6,7 +6,7 @@
 #include <onex-kernel/log.h>
 #include <onex-kernel/time.h>
 #include <items.h>
-#include <onf.h>
+#include <onn.h>
 #include <onr.h>
 
 static bool discover_io_peer(object* o, char* property, char* is)

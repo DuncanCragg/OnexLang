@@ -6,7 +6,7 @@
 extern "C" {
 #include <onex-kernel/log.h>
 #include <onex-kernel/time.h>
-#include <onf.h>
+#include <onn.h>
 #include <assert.h>
 extern void run_light_tests();
 extern void run_evaluate_object_setter_tests();

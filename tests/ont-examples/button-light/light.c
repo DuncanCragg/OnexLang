@@ -11,7 +11,7 @@
 #endif
 #include <onex-kernel/time.h>
 #include <onex-kernel/log.h>
-#include <onf.h>
+#include <onn.h>
 #include <onr.h>
 
 #if defined(NRF5)
