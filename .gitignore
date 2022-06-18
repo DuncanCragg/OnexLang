@@ -8,7 +8,7 @@ local.properties
 *.o
 *.hex
 *.elf
-*.linux
+*.x86
 Onex/
 _build
 dfu.zip

@@ -9,8 +9,8 @@ targets:
 INCLUDES = \
 -I./include \
 -I./src/ \
--I./OnexKernel/tests \
--I./OnexKernel/include \
+-I../OnexKernel/tests \
+-I../OnexKernel/include \
 
 
 C_SOURCE_FILES = \
@@ -18,7 +18,7 @@ C_SOURCE_FILES = \
 
 
 TESTS_OBJECTS = \
-./OnexKernel/tests/assert.c \
+../OnexKernel/tests/assert.c \
 ./tests/test-behaviours.c \
 ./tests/main.c \
 
@@ -48,7 +48,7 @@ tests.x86: LD=/usr/bin/gcc
 tests.x86: TARGET=TARGET_X86
 tests.x86: CHANNELS=-DONP_CHANNEL_SERIAL
 tests.x86: libonex-lang-x86.a ${TESTS_OBJECTS:.c=.o}
-	$(LD) ${TESTS_OBJECTS:.c=.o} -pthread -L. -lonex-lang-x86 -LOnexKernel -lonex-kernel-x86 -o $@
+	$(LD) ${TESTS_OBJECTS:.c=.o} -pthread -L. -lonex-lang-x86 -L../OnexKernel -lonex-kernel-x86 -o $@
 
 button.x86: COMPILE_LINE=${X86_FLAGS} ${CC_FLAGS} $(X86_CC_SYMBOLS) ${INCLUDES}
 button.x86: CC=/usr/bin/gcc
@@ -56,7 +56,7 @@ button.x86: LD=/usr/bin/gcc
 button.x86: TARGET=TARGET_X86
 button.x86: CHANNELS=-DONP_CHANNEL_SERIAL
 button.x86: libonex-lang-x86.a ${BUTTON_OBJECTS:.c=.o}
-	$(LD) ${BUTTON_OBJECTS:.c=.o} -pthread -L. -lonex-lang-x86 -LOnexKernel -lonex-kernel-x86 -o $@
+	$(LD) ${BUTTON_OBJECTS:.c=.o} -pthread -L. -lonex-lang-x86 -L../OnexKernel -lonex-kernel-x86 -o $@
 
 light.x86: COMPILE_LINE=${X86_FLAGS} ${CC_FLAGS} $(X86_CC_SYMBOLS) ${INCLUDES}
 light.x86: CC=/usr/bin/gcc
@@ -64,7 +64,7 @@ light.x86: LD=/usr/bin/gcc
 light.x86: TARGET=TARGET_X86
 light.x86: CHANNELS=-DONP_CHANNEL_SERIAL
 light.x86: libonex-lang-x86.a ${LIGHT_OBJECTS:.c=.o}
-	$(LD) ${LIGHT_OBJECTS:.c=.o} -pthread -L. -lonex-lang-x86 -LOnexKernel -lonex-kernel-x86 -o $@
+	$(LD) ${LIGHT_OBJECTS:.c=.o} -pthread -L. -lonex-lang-x86 -L../OnexKernel -lonex-kernel-x86 -o $@
 
 #############################:
 
