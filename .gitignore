@@ -1,6 +1,5 @@
 .*.sw?
 doc/local
-android/doc
 ,*
 build/
 .cxx/

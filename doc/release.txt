@@ -1,8 +1,4 @@
 
-Make cleanlibs; Make android.tests
-..or..
-Make cleanlibs; Make android.tests.lan
-
 Make clean; Make linux.tests
 
 # edit target: TESTS
