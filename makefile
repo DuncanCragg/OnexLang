@@ -8,22 +8,21 @@ PRETTY  = 1
 SDK_ROOT := ./sdk
 
 $(OUTPUT_DIRECTORY)/onex.out: \
-  LINKER_SCRIPT  := ./OnexKernel/src/platforms/nRF5/onex.ld
+  LINKER_SCRIPT  := ../OnexKernel/src/platforms/nRF5/onex.ld
 
 
 NRF5_INCLUDES = \
 ./include \
 ./src \
 ./tests \
-./OnexKernel/include \
-./OnexKernel/src \
-./OnexKernel/src/onp \
-./OnexKernel/src/platforms/nRF5 \
-./OnexKernel/tests \
+../OnexKernel/include \
+../OnexKernel/src \
+../OnexKernel/src/onp \
+../OnexKernel/src/platforms/nRF5 \
+../OnexKernel/tests \
 
 
 TESTS_OBJECTS = \
-./OnexKernel/tests/assert.c \
 ./tests/test-behaviours.c \
 ./tests/main.c \
 
@@ -38,92 +37,9 @@ LIGHT_OBJECTS = \
 
 LIB_OBJECTS = \
 ./src/behaviours.c \
-./OnexKernel/src/lib/list.c \
-./OnexKernel/src/lib/value.c \
-./OnexKernel/src/onp/onp.c \
-./OnexKernel/src/onn/onn.c \
-
-
-NRF5_C_SOURCE_FILES = \
-./OnexKernel/src/platforms/nRF5/properties.c \
-./OnexKernel/src/platforms/nRF5/time.c \
-./OnexKernel/src/platforms/nRF5/mem.c \
-./OnexKernel/src/platforms/nRF5/random.c \
-./OnexKernel/src/platforms/nRF5/gpio.c \
-./OnexKernel/src/platforms/nRF5/serial.c \
-./OnexKernel/src/platforms/nRF5/blenus.c \
-./OnexKernel/src/platforms/nRF5/log.c \
-./OnexKernel/src/platforms/nRF5/channel-serial.c \
-
 
 # Source files common to all targets
 SRC_FILES += \
-  $(SDK_ROOT)/modules/nrfx/mdk/gcc_startup_nrf52840.S \
-  $(SDK_ROOT)/components/libraries/mem_manager/mem_manager.c \
-  $(SDK_ROOT)/components/libraries/log/src/nrf_log_backend_rtt.c \
-  $(SDK_ROOT)/components/libraries/log/src/nrf_log_backend_serial.c \
-  $(SDK_ROOT)/components/libraries/log/src/nrf_log_backend_uart.c \
-  $(SDK_ROOT)/components/libraries/log/src/nrf_log_default_backends.c \
-  $(SDK_ROOT)/components/libraries/log/src/nrf_log_frontend.c \
-  $(SDK_ROOT)/components/libraries/log/src/nrf_log_str_formatter.c \
-  $(SDK_ROOT)/components/libraries/button/app_button.c \
-  $(SDK_ROOT)/components/libraries/util/app_error.c \
-  $(SDK_ROOT)/components/libraries/util/app_error_handler_gcc.c \
-  $(SDK_ROOT)/components/libraries/util/app_error_weak.c \
-  $(SDK_ROOT)/components/libraries/scheduler/app_scheduler.c \
-  $(SDK_ROOT)/components/libraries/timer/app_timer2.c \
-  $(SDK_ROOT)/components/libraries/util/app_util_platform.c \
-  $(SDK_ROOT)/components/libraries/timer/drv_rtc.c \
-  $(SDK_ROOT)/components/libraries/hardfault/hardfault_implementation.c \
-  $(SDK_ROOT)/components/libraries/util/nrf_assert.c \
-  $(SDK_ROOT)/components/libraries/atomic_fifo/nrf_atfifo.c \
-  $(SDK_ROOT)/components/libraries/atomic_flags/nrf_atflags.c \
-  $(SDK_ROOT)/components/libraries/atomic/nrf_atomic.c \
-  $(SDK_ROOT)/components/libraries/balloc/nrf_balloc.c \
-  $(SDK_ROOT)/components/libraries/cli/nrf_cli.c \
-  $(SDK_ROOT)/components/libraries/cli/uart/nrf_cli_uart.c \
-  $(SDK_ROOT)/external/fprintf/nrf_fprintf.c \
-  $(SDK_ROOT)/external/fprintf/nrf_fprintf_format.c \
-  $(SDK_ROOT)/components/libraries/memobj/nrf_memobj.c \
-  $(SDK_ROOT)/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c \
-  $(SDK_ROOT)/components/libraries/queue/nrf_queue.c \
-  $(SDK_ROOT)/components/libraries/ringbuf/nrf_ringbuf.c \
-  $(SDK_ROOT)/components/libraries/experimental_section_vars/nrf_section_iter.c \
-  $(SDK_ROOT)/components/libraries/sortlist/nrf_sortlist.c \
-  $(SDK_ROOT)/components/libraries/strerror/nrf_strerror.c \
-  $(SDK_ROOT)/components/libraries/usbd/app_usbd.c \
-  $(SDK_ROOT)/components/libraries/usbd/class/cdc/acm/app_usbd_cdc_acm.c \
-  $(SDK_ROOT)/components/libraries/usbd/app_usbd_core.c \
-  $(SDK_ROOT)/components/libraries/usbd/app_usbd_serial_num.c \
-  $(SDK_ROOT)/components/libraries/usbd/app_usbd_string_desc.c \
-  $(SDK_ROOT)/modules/nrfx/mdk/system_nrf52840.c \
-  $(SDK_ROOT)/components/boards/boards.c \
-  $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_clock.c \
-  $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_power.c \
-  $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_uart.c \
-  $(SDK_ROOT)/modules/nrfx/soc/nrfx_atomic.c \
-  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_clock.c \
-  $(SDK_ROOT)/modules/nrfx/drivers/src/prs/nrfx_prs.c \
-  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_systick.c \
-  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_power.c \
-  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_uart.c \
-  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_uarte.c \
-  $(SDK_ROOT)/components/libraries/bsp/bsp.c \
-  $(SDK_ROOT)/components/libraries/bsp/bsp_cli.c \
-  $(SDK_ROOT)/components/ble/common/ble_advdata.c \
-  $(SDK_ROOT)/components/ble/common/ble_conn_params.c \
-  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_usbd.c \
-  $(SDK_ROOT)/components/ble/common/ble_conn_state.c \
-  $(SDK_ROOT)/components/ble/common/ble_srv_common.c \
-  $(SDK_ROOT)/components/ble/nrf_ble_gatt/nrf_ble_gatt.c \
-  $(SDK_ROOT)/components/ble/nrf_ble_qwr/nrf_ble_qwr.c \
-  $(SDK_ROOT)/external/utf_converter/utf.c \
-  $(SDK_ROOT)/components/ble/ble_services/ble_nus/ble_nus.c \
-  $(SDK_ROOT)/components/ble/ble_services/ble_lbs/ble_lbs.c \
-  $(SDK_ROOT)/components/ble/ble_link_ctx_manager/ble_link_ctx_manager.c \
-  $(SDK_ROOT)/components/softdevice/common/nrf_sdh.c \
-  $(SDK_ROOT)/components/softdevice/common/nrf_sdh_ble.c \
-  $(SDK_ROOT)/components/softdevice/common/nrf_sdh_soc.c \
   $(SRC_FILES_MAIN)
 
 
@@ -331,6 +247,22 @@ LIB_FILES += -lc -lnosys -lm
 # Default target - first one defined
 default: onex
 
+test: onex
+	rm $(OUTPUT_DIRECTORY)/onex.hex
+	ar x ../OnexKernel/libonex-kernel-nrf.a --output _build/onex
+	$(CC) -O3 -g3 -mthumb -mabi=aapcs -L./sdk/modules/nrfx/mdk -T../OnexKernel/src/platforms/nRF5/onex.ld -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,--gc-sections --specs=nano.specs _build/onex/*.o -o _build/onex.out
+	$(OBJCOPY) -O ihex _build/onex.out _build/onex.hex
+
+$(OUTPUT_DIRECTORY)/onex/*.o: onex
+
+libonex-lang-nrf.a: $(OUTPUT_DIRECTORY)/onex/*.o
+	rm $(OUTPUT_DIRECTORY)/onex/main.c.o
+	rm $(OUTPUT_DIRECTORY)/onex/test-*.c.o
+	$(AR) rcs $@ $^
+
+nrf.lib: libonex-lang-nrf.a
+
+
 # Print all targets that can be built
 help:
 	@echo following targets are available:
@@ -376,3 +308,5 @@ CMSIS_CONFIG_TOOL := $(SDK_ROOT)/external_tools/cmsisconfig/CMSIS_Configuration_
 sdk_config:
 	java -jar $(CMSIS_CONFIG_TOOL) $(SDK_CONFIG_FILE)
 
+cleanx:
+	rm -rf _build dfu.zip
