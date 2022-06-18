@@ -41,7 +41,7 @@ LIB_OBJECTS = \
 ./OnexKernel/src/lib/list.c \
 ./OnexKernel/src/lib/value.c \
 ./OnexKernel/src/onp/onp.c \
-./OnexKernel/src/onf/onf.c \
+./OnexKernel/src/onn/onn.c \
 
 
 NRF5_C_SOURCE_FILES = \
