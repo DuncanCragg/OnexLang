@@ -259,6 +259,7 @@ libonex-lang-nrf.a: $(OUTPUT_DIRECTORY)/onex-lang/*.o
 	rm $(OUTPUT_DIRECTORY)/onex-lang/main.c.o
 	rm $(OUTPUT_DIRECTORY)/onex-lang/test-*.c.o
 	$(AR) rcs $@ $^
+	/home/duncan/gcc-arm/bin/arm-none-eabi-strip -g $@
 
 nrf.lib: libonex-lang-nrf.a
 
