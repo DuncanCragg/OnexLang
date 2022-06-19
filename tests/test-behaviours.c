@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <inttypes.h>
-#include <assert.h>
+#include <tests.h>
 #include <onex-kernel/log.h>
 #include <onex-kernel/time.h>
 #include <items.h>

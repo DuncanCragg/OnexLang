@@ -12,7 +12,7 @@
 #endif
 #include <onex-kernel/time.h>
 #include <onex-kernel/log.h>
-#include <assert.h>
+#include <tests.h>
 #include <onn.h>
 
 extern void run_light_tests();
