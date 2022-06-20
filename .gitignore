@@ -6,7 +6,11 @@ build/
 .gradle
 local.properties
 *.o
+*.d
 *.hex
+*.bin
+*.map
+*.out
 *.elf
 *.x86
 *.arm
