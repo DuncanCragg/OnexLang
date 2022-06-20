@@ -1,4 +1,10 @@
-##########################################################################
+
+############################################################################################
+
+targets:
+	@grep '^[a-zA-Z0-9\.#-]\+:' makefile | grep -v '^\.' | grep -v targets | sed 's/:.*//' | uniq | sed 's/\.elf/.hex/' | sed 's/^/make clean \&\& make /'
+
+############################################################################################
 # set a link to the nordic SDK, something like:
 # ./sdk -> /home/<username>/nordic-platform/nRF5_SDK_16.0.0_98a08e2/
 
@@ -98,8 +104,6 @@ LIB_SOURCES = \
 
 OK_INCLUDES = \
 -I../OnexKernel/include \
--I../OnexKernel/src \
--I../OnexKernel/src/onp \
 -I../OnexKernel/src/platforms/nRF5 \
 -I../OnexKernel/tests \
 
