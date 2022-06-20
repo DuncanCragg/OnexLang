@@ -247,7 +247,7 @@ LIB_FILES += -lc -lnosys -lm
 # Default target - first one defined
 default: onex-lang
 
-test: onex-lang
+tests: onex-lang
 	rm $(OUTPUT_DIRECTORY)/onex-lang.hex
 	ar x ../OnexKernel/libonex-kernel-nrf.a --output _build/onex-lang
 	$(CC) -O3 -g3 -mthumb -mabi=aapcs -L./sdk/modules/nrfx/mdk -T../OnexKernel/src/platforms/nRF5/onex.ld -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,--gc-sections --specs=nano.specs _build/onex-lang/*.o -o _build/onex-lang.out
@@ -285,12 +285,12 @@ $(foreach target, $(TARGETS), $(call define_target, $(target)))
 PRIVATE_PEM = ~/the-u-web/OnexKernel/doc/local/private.pem
 
 # Flash the program
-flash0: default
+flash0: tests
 	@echo Flashing: $(OUTPUT_DIRECTORY)/onex-lang.hex
 	nrfutil pkg generate --hw-version 52 --sd-req 0xCA --application-version 1 --application _build/onex-lang.hex --key-file $(PRIVATE_PEM) dfu.zip
 	nrfutil dfu usb-serial -pkg dfu.zip -p /dev/ttyACM0 -b 115200
 
-flash1: default
+flash1: tests
 	@echo Flashing: $(OUTPUT_DIRECTORY)/onex-lang.hex
 	nrfutil pkg generate --hw-version 52 --sd-req 0xCA --application-version 1 --application _build/onex-lang.hex --key-file $(PRIVATE_PEM) dfu.zip
 	nrfutil dfu usb-serial -pkg dfu.zip -p /dev/ttyACM1 -b 115200

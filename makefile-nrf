@@ -9,6 +9,45 @@ PRIVATE_PEM = ../OnexKernel/doc/local/private.pem
 
 #######################
 
+TESTS = '1'
+BUTTON ='0'
+LIGHT = '0'
+
+EXE_SOURCES =  $(LIB_SOURCES)
+EXE_DEFINES =
+
+ifeq ($(TESTS), '1')
+ EXE_SOURCES += $(TESTS_SOURCES)
+#EXE_DEFINES += -DLOG_TO_BLE
+ EXE_DEFINES += -DLOG_TO_SERIAL
+ EXE_DEFINES += -DHAS_SERIAL
+#EXE_DEFINES += -DONP_CHANNEL_SERIAL
+#EXE_DEFINES += -DONP_OVER_SERIAL
+#EXE_DEFINES += -DONP_DEBUG
+endif
+
+ifeq ($(BUTTON), '1')
+ EXE_SOURCES += $(BUTTON_SOURCES)
+ EXE_DEFINES += -DLOG_TO_BLE
+#EXE_DEFINES += -DLOG_TO_SERIAL
+ EXE_DEFINES += -DHAS_SERIAL
+ EXE_DEFINES += -DONP_CHANNEL_SERIAL
+ EXE_DEFINES += -DONP_OVER_SERIAL
+#EXE_DEFINES += -DONP_DEBUG
+endif
+
+ifeq ($(LIGHT), '1')
+ EXE_SOURCES += $(LIGHT_SOURCES)
+ EXE_DEFINES += -DLOG_TO_BLE
+#EXE_DEFINES += -DLOG_TO_SERIAL
+ EXE_DEFINES += -DHAS_SERIAL
+ EXE_DEFINES += -DONP_CHANNEL_SERIAL
+ EXE_DEFINES += -DONP_OVER_SERIAL
+#EXE_DEFINES += -DONP_DEBUG
+endif
+
+#######################
+
 COMMON_DEFINES = \
 -DAPP_TIMER_V2 \
 -DAPP_TIMER_V2_RTC1_ENABLED \
@@ -26,8 +65,7 @@ COMMON_DEFINES = \
 
 COMPILER_DEFINES = \
 $(COMMON_DEFINES) \
--DLOG_TO_SERIAL \
--DHAS_SERIAL \
+$(EXE_DEFINES) \
 
 #######################
 
@@ -208,7 +246,7 @@ libonex-lang-nrf.a: $(LIB_SOURCES:.c=.o)
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-ar rcs $@ $^
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-strip -g $@
 
-nrf.tests: $(TESTS_SOURCES:.c=.o) $(LIB_SOURCES:.c=.o)
+nrf.tests: $(EXE_SOURCES:.c=.o)
 	mkdir -p oko
 	ar x ../OnexKernel/libonex-kernel-nrf.a --output oko
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-gcc $(LINKER_FLAGS) $(LD_FILES) -Wl,-Map=./onex-lang.map -o ./onex-lang.out $^ oko/*
