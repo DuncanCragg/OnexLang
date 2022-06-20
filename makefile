@@ -1,10 +1,10 @@
-##########################################################################
+#-------------------------------------------------------------------------------
 # nRF5 Makefile
 
 targets:
 	@grep '^[a-zA-Z0-9\.#-]\+:' makefile | grep -v '^\.' | grep -v targets | sed 's/:.*//' | uniq | sed 's/\.elf/.hex/' | sed 's/^/make clean \&\& make /'
 
-############################################################################################
+#-------------------------------------------------------------------------------
 # set a link to the nordic SDK, something like:
 # ./sdk -> /home/<username>/nordic-platform/nRF5_SDK_16.0.0_98a08e2/
 
@@ -13,7 +13,7 @@ GCC_ARM_PREFIX = arm-none-eabi
 
 PRIVATE_PEM = ../OnexKernel/doc/local/private.pem
 
-#######################
+#-------------------------------------------------------------------------------
 
 TESTS = '1'
 BUTTON ='0'
@@ -52,7 +52,7 @@ ifeq ($(LIGHT), '1')
 #EXE_DEFINES += -DONP_DEBUG
 endif
 
-#######################
+#-------------------------------------------------------------------------------
 
 COMMON_DEFINES = \
 -DAPP_TIMER_V2 \
@@ -73,7 +73,7 @@ COMPILER_DEFINES = \
 $(COMMON_DEFINES) \
 $(EXE_DEFINES) \
 
-#######################
+#-------------------------------------------------------------------------------
 
 INCLUDES = \
 -I./include \
@@ -82,7 +82,7 @@ INCLUDES = \
 $(OK_INCLUDES) \
 $(SDK_INCLUDES) \
 
-#######################
+#-------------------------------------------------------------------------------
 
 TESTS_SOURCES = \
 ./tests/test-behaviours.c \
@@ -100,12 +100,13 @@ LIGHT_SOURCES = \
 LIB_SOURCES = \
 ./src/behaviours.c \
 
-############################################
+#-------------------------------------------------------------------------------
 
 OK_INCLUDES = \
 -I../OnexKernel/include \
 -I../OnexKernel/src/platforms/nRF5 \
 -I../OnexKernel/tests \
+
 
 SDK_INCLUDES = \
 -I./sdk/components/boards \
@@ -124,7 +125,7 @@ SDK_INCLUDES = \
 -I./sdk/modules/nrfx/hal/ \
 -I./sdk/modules/nrfx/mdk \
 
-##########################################################################
+#-------------------------------------------------------------------------------
 # Targets
 
 nrf.lib: libonex-lang-nrf.a
@@ -146,7 +147,7 @@ flash0: nrf.tests
 	nrfutil pkg generate --hw-version 52 --sd-req 0xCA --application-version 1 --application ./onex-lang.hex --key-file $(PRIVATE_PEM) dfu.zip
 	nrfutil dfu usb-serial -pkg dfu.zip -p /dev/ttyACM0 -b 115200
 
-############################################
+#-------------------------------------------------------------------------------
 
 COMPILER_FLAGS = -std=c99 -MP -MD -O3 -g3 -mcpu=cortex-m4 -mthumb -mabi=aapcs -Wall -Werror -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin -fshort-enums
 
@@ -165,4 +166,4 @@ clean:
 	@echo "files not cleaned:"
 	@git ls-files --others --exclude-from=.git/info/exclude | xargs -r ls -Fla
 
-############################################
+#-------------------------------------------------------------------------------
