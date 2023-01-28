@@ -143,13 +143,13 @@ LIB_SOURCES = \
 
 OK_INCLUDES_S132 = \
 -I../OnexKernel/include \
--I../OnexKernel/src/platforms/nRF5/s132 \
+-I../OnexKernel/src/platforms/nRF5/pinetime \
 -I../OnexKernel/tests \
 
 
 OK_INCLUDES_S140 = \
 -I../OnexKernel/include \
--I../OnexKernel/src/platforms/nRF5 \
+-I../OnexKernel/src/platforms/nRF5/dongle \
 -I../OnexKernel/tests \
 
 
@@ -185,10 +185,6 @@ SDK_INCLUDES = \
 #-------------------------------------------------------------------------------
 # Targets
 
-nrf.lib.132: libonex-lang-132.a
-
-nrf.lib.140: libonex-lang-140.a
-
 libonex-lang-132.a: INCLUDES=$(INCLUDES_S132)
 libonex-lang-132.a: COMPILER_DEFINES=$(COMPILER_DEFINES_S132)
 libonex-lang-132.a: $(LIB_SOURCES:.c=.o)
@@ -205,10 +201,10 @@ libonex-lang-140.a: $(LIB_SOURCES:.c=.o)
 
 nrf.tests.s132: INCLUDES=$(INCLUDES_S132)
 nrf.tests.s132: COMPILER_DEFINES=$(COMPILER_DEFINES_S132)
-nrf.tests.s132: nrf.lib.132 $(EXE_SOURCES:.c=.o)
+nrf.tests.s132: libonex-lang-132.a $(EXE_SOURCES:.c=.o)
 	rm -rf okolo
 	mkdir okolo
-	ar x ../OnexKernel/libonex-kernel-132.a --output okolo
+	ar x ../OnexKernel/libonex-kernel-pinetime.a --output okolo
 	ar x             ./libonex-lang-132.a   --output okolo
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-gcc $(LINKER_FLAGS) $(LD_FILES_S132) -Wl,-Map=./onex-lang.map -o ./onex-lang.out $(EXE_SOURCES:.c=.o) okolo/*
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-size ./onex-lang.out
@@ -217,10 +213,10 @@ nrf.tests.s132: nrf.lib.132 $(EXE_SOURCES:.c=.o)
 
 nrf.tests.s140: INCLUDES=$(INCLUDES_S140)
 nrf.tests.s140: COMPILER_DEFINES=$(COMPILER_DEFINES_S140)
-nrf.tests.s140: nrf.lib.140 $(EXE_SOURCES:.c=.o)
+nrf.tests.s140: libonex-lang-140.a $(EXE_SOURCES:.c=.o)
 	rm -rf okolo
 	mkdir okolo
-	ar x ../OnexKernel/libonex-kernel-140.a --output okolo
+	ar x ../OnexKernel/libonex-kernel-dongle.a --output okolo
 	ar x             ./libonex-lang-140.a   --output okolo
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-gcc $(LINKER_FLAGS) $(LD_FILES_S140) -Wl,-Map=./onex-lang.map -o ./onex-lang.out $(EXE_SOURCES:.c=.o) okolo/*
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-size ./onex-lang.out
@@ -247,8 +243,8 @@ dongle-flash: nrf.tests.s140
 
 LINKER_FLAGS = -O3 -g3 -mthumb -mabi=aapcs -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,--gc-sections --specs=nano.specs
 
-LD_FILES_S132 = -L./sdk/modules/nrfx/mdk -T../OnexKernel/src/platforms/nRF5/s132/onex.ld
-LD_FILES_S140 = -L./sdk/modules/nrfx/mdk -T../OnexKernel/src/platforms/nRF5/onex.ld
+LD_FILES_S132 = -L./sdk/modules/nrfx/mdk -T../OnexKernel/src/platforms/nRF5/pinetime/onex.ld
+LD_FILES_S140 = -L./sdk/modules/nrfx/mdk -T../OnexKernel/src/platforms/nRF5/dongle/onex.ld
 
 COMPILER_FLAGS = -std=c99 -O3 -g3 -mcpu=cortex-m4 -mthumb -mabi=aapcs -Wall -Werror -Wno-unused-function -Wno-unused-variable -Wno-unused-but-set-variable -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin -fshort-enums
 
