@@ -98,7 +98,7 @@ LIB_SOURCES = \
 
 OK_INCLUDES_DONGLE = \
 -I../OnexKernel/include \
--I../OnexKernel/src/platforms/nRF5/dongle \
+-I../OnexKernel/src/onl/nRF5/dongle \
 -I../OnexKernel/tests \
 
 
@@ -145,7 +145,7 @@ dongle-flash: nrf.tests
 
 LINKER_FLAGS = -O3 -g3 -mthumb -mabi=aapcs -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,--gc-sections --specs=nano.specs
 
-LD_FILES_DONGLE = -L./sdk/modules/nrfx/mdk -T../OnexKernel/src/platforms/nRF5/dongle/onex.ld
+LD_FILES_DONGLE = -L./sdk/modules/nrfx/mdk -T../OnexKernel/src/onl/nRF5/dongle/onex.ld
 
 COMPILER_FLAGS = -std=c99 -O3 -g3 -mcpu=cortex-m4 -mthumb -mabi=aapcs -Wall -Werror -Wno-unused-function -Wno-unused-variable -Wno-unused-but-set-variable -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin -fshort-enums
 
