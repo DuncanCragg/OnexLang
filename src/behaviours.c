@@ -50,7 +50,7 @@ bool evaluate_light_logic(object* o, void* d)
     changed=true;
   }
 
-  if(light_on && !object_property(o, "Timer"))  {
+  if(light_on /* && !object_property(o, "Timer") */ )  {
 
     char* timeout=object_property(o, "timeout");
     if(timeout){
