@@ -187,7 +187,8 @@ bool evaluate_clock_sync(object* o, void* d)
   char* sync_ts=object_property(o, "sync-clock:ts");
   if(sync_ts && !object_property_is(o, "sync-ts", sync_ts)){
     object_property_set(o, "sync-ts",  sync_ts);
-    object_property_set(o, "tz",  object_property_values(o, "sync-clock:tz"));
+    object_property_set(o, "tz",  object_property(o, "sync-clock:tz:1"));
+    object_property_add(o, "tz",  object_property(o, "sync-clock:tz:2"));
     char* e; uint64_t sync_clock_ts=strtoull(sync_ts,&e,10);
     if(!*e && sync_clock_ts) time_es_set(sync_clock_ts);
   }
