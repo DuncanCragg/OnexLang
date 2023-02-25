@@ -204,7 +204,6 @@ void run_clock_tests()
   char* clock_synced_from_uid=object_property(clock_synced_from, "UID");
   char* clock_to_sync_uid    =object_property(clock_to_sync, "UID");
 
-  object_property_set(clock_synced_from, "tz", "GMT 0");
   object_property_set(clock_to_sync, "sync-clock", clock_synced_from_uid);
 
   time_es_set(12345555);
@@ -213,19 +212,24 @@ void run_clock_tests()
   onex_run_evaluators(clock_to_sync_uid, 0);
 
   onex_loop();
-  onex_assert_equal(object_property(clock_synced_from, "ts"), "12345555", "clock updates");
+
+  onex_assert_equal(object_property(   clock_synced_from, "ts"),  "12345555", "sync clock sets epoch");
+  onex_assert_equal(object_property(   clock_to_sync,     "ts"),  "12345555", "clocks synced");
+  onex_assert(      object_property_is(clock_to_sync,     "tz:1", "GMT") ||
+                    object_property_is(clock_to_sync,     "tz:1", "BST"),     "timezone id synced" );
+  onex_assert(      object_property_is(clock_to_sync,     "tz:2", "0") ||
+                    object_property_is(clock_to_sync,     "tz:2", "3600"),    "timezone offset synced" );
 
   object_property_set(clock_synced_from, "ts", "12345678");
+  object_property_set(clock_synced_from, "tz", "XYZ 1234");
+
   onex_loop();
 
   onex_assert_equal_num(time_es(), 12345678, "epoch clock set");
 
-  onex_assert_equal(object_property(clock_to_sync, "sync-ts"), "12345678", "clocks synced");
-#if defined(NRF5)
-  onex_assert_equal(object_property_values(clock_to_sync, "tz"), "GMT 0", "timezone synced");
-#else
-  onex_assert_equal(object_property_values(clock_to_sync, "tz"), "BST 3600", "timezone synced (fix tests when GMT 0!)");
-#endif
-  onex_assert_equal(object_property(clock_to_sync, "ts"), "12345678", "clock synced or updates");
+  onex_assert_equal(object_property(   clock_to_sync, "sync-ts"), "12345678", "clocks synced");
+  onex_assert_equal(object_property(   clock_to_sync, "ts"),      "12345678", "clocks synced");
+  onex_assert(      object_property_is(clock_to_sync,  "tz:1", "XYZ"),        "timezone id synced" );
+  onex_assert(      object_property_is(clock_to_sync,  "tz:2", "1234"),       "timezone offset synced" );
 }
 

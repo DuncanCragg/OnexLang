@@ -214,17 +214,22 @@ bool evaluate_clock(object* o, void* d)
   snprintf(ess, 16, "%"PRIu64, es);
 #endif
 
-  if(object_property_is(o, "ts", ess)) return true;
+  if(object_property_is(o, "ts", ess)) return true; // XXX remove when no-change OK
 
   object_property_set(o, "ts", ess);
 
+  if(!object_property(o, "sync-clock")){
+    time_t est = (time_t)es;
+    struct tm tms={0};
+    localtime_r(&est, &tms);
+    char t[32];
 #if !defined(NRF5)
-  time_t est = (time_t)es;
-  struct tm tms={0};
-  localtime_r(&est, &tms);
-  char t[32]; snprintf(t, 32, "%s %ld", tms.tm_zone, tms.tm_gmtoff);
-  object_property_set(o, "tz", t);
+    snprintf(t, 32, "%s %ld", tms.tm_zone, tms.tm_gmtoff);
+#else
+    snprintf(t, 32, "GMT 0");
 #endif
+    object_property_set(o, "tz", t);
+  }
 
   return true;
 }
