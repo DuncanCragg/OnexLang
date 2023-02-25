@@ -105,7 +105,8 @@ void run_evaluate_object_setter_tests()
   onex_run_evaluators(targetuid, update);
   onex_loop();
   onex_loop();
-  onex_assert_equal(object_property_values(target, "banana"), "mango orange", "evaluate_object_setter set banana to 'mango orange'");
+  onex_assert_equal(object_property(target, "banana:1"), "mango",  "evaluate_object_setter set banana to 'mango orange'");
+  onex_assert_equal(object_property(target, "banana:2"), "orange", "evaluate_object_setter set banana to 'mango orange'");
 
   update = properties_new(3);
   li=list_new(3);
@@ -117,7 +118,9 @@ void run_evaluate_object_setter_tests()
   onex_run_evaluators(targetuid, update);
   onex_loop();
   onex_loop();
-  onex_assert_equal(object_property_values(target, "banana"), "mango orange fig", "evaluate_object_setter set banana to 'mango orange fig'");
+  onex_assert_equal(object_property(target, "banana:1"), "mango",  "evaluate_object_setter set banana to 'mango orange fig'");
+  onex_assert_equal(object_property(target, "banana:2"), "orange", "evaluate_object_setter set banana to 'mango orange fig'");
+  onex_assert_equal(object_property(target, "banana:3"), "fig",    "evaluate_object_setter set banana to 'mango orange fig'");
 
   update = properties_new(3);
   li=list_new(3);
@@ -129,7 +132,8 @@ void run_evaluate_object_setter_tests()
   onex_run_evaluators(targetuid, update);
   onex_loop();
   onex_loop();
-  onex_assert_equal(object_property_values(target, "banana"), "mango fig", "evaluate_object_setter set banana to 'mango fig'");
+  onex_assert_equal(object_property(target, "banana:1"), "mango", "evaluate_object_setter set banana to 'mango fig'");
+  onex_assert_equal(object_property(target, "banana:2"), "fig",   "evaluate_object_setter set banana to 'mango fig'");
 
   update = properties_new(3);
   li=list_new(3);
@@ -139,7 +143,7 @@ void run_evaluate_object_setter_tests()
   onex_run_evaluators(targetuid, update);
   onex_loop();
   onex_loop();
-  onex_assert(     !object_property_values(target, "banana"),              "evaluate_object_setter set banana to empty");
+  onex_assert(     !object_property(target, "banana"), "evaluate_object_setter set banana to empty");
 }
 
 void run_evaluate_edit_rule_tests()
@@ -156,23 +160,27 @@ void run_evaluate_edit_rule_tests()
 
   object_property_set(edit, "banana", "=> mango");
   onex_loop();
-  onex_assert_equal(object_property_values(target, "banana"), "mango",            "evaluate_edit_rule set banana to 'mango'");
+  onex_assert_equal(object_property(target, "banana"), "mango",      "evaluate_edit_rule set banana to 'mango'");
 
   object_property_set(edit, "banana", "=> @. orange");
   onex_loop();
-  onex_assert_equal(object_property_values(target, "banana"), "mango orange",     "evaluate_edit_rule set banana to 'mango orange'");
+  onex_assert_equal(object_property(target, "banana:1"), "mango",    "evaluate_edit_rule set banana to 'mango orange'");
+  onex_assert_equal(object_property(target, "banana:2"), "orange",   "evaluate_edit_rule set banana to 'mango orange'");
 
   object_property_set(edit, "banana", "=> @. fig");
   onex_loop();
-  onex_assert_equal(object_property_values(target, "banana"), "mango orange fig", "evaluate_edit_rule set banana to 'mango orange fig'");
+  onex_assert_equal(object_property(target, "banana:1"), "mango",    "evaluate_edit_rule set banana to 'mango orange fig'");
+  onex_assert_equal(object_property(target, "banana:2"), "orange",   "evaluate_edit_rule set banana to 'mango orange fig'");
+  onex_assert_equal(object_property(target, "banana:3"), "fig",      "evaluate_edit_rule set banana to 'mango orange fig'");
 
   object_property_set(edit, "banana", "something (=>) something");
   onex_loop();
-  onex_assert_equal(object_property_values(target, "banana"), "mango fig",        "evaluate_edit_rule set banana to 'mango fig'");
+  onex_assert_equal(object_property(target, "banana:1"), "mango",    "evaluate_edit_rule set banana to 'mango fig'");
+  onex_assert_equal(object_property(target, "banana:2"), "fig",      "evaluate_edit_rule set banana to 'mango fig'");
 
   object_property_set(edit, "banana", "=>");
   onex_loop();
-  onex_assert(     !object_property_values(target, "banana"),                     "evaluate_edit_rule set banana to nothing");
+  onex_assert(     !object_property(target, "banana"),               "evaluate_edit_rule set banana to nothing");
 }
 
 void run_device_tests()
