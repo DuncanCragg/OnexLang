@@ -72,8 +72,11 @@ bool evaluate_light_logic(object* o, void* d)
   return changed;
 }
 
-void apply_edit(object* o)
-{
+bool evaluate_edit_rule(object* o, void* d) {
+
+  if(!(object_property_contains(o, "Alerted:is", "edit") &&
+       object_property_contains(o, "Alerted:is", "rule")   )) return true;
+
   uint16_t n=object_property_size(o, "Alerted:");
   for(int i=1; i<=n; i++){
     char* key=object_property_key(o, "Alerted:", i);
@@ -92,7 +95,7 @@ void apply_edit(object* o)
         if(!strcmp(val, "(=>)")){
           char delkey[128]; snprintf(delkey, 128, "%s:%d", key, j);
           object_property_set(o, delkey, 0);
-          return;
+          return true;
         }
         continue;
       }
@@ -111,15 +114,6 @@ void apply_edit(object* o)
     if(arrowindex==ln){
       object_property_set(o, key, 0);
     }
-  }
-}
-
-bool evaluate_edit_rule(object* o, void* d)
-{
-  if(object_property_contains(o, "Alerted:is", "edit") &&
-     object_property_contains(o, "Alerted:is", "rule")   ){
-
-    apply_edit(o);
   }
   return true;
 }
