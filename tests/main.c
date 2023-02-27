@@ -16,7 +16,6 @@
 #include <onn.h>
 
 extern void run_light_tests();
-extern void run_evaluate_object_setter_tests();
 extern void run_evaluate_edit_rule_tests();
 extern void run_device_tests();
 extern void run_clock_tests();
@@ -57,7 +56,6 @@ void run_tests_maybe()
   onex_init("");
 
   run_light_tests();
-  run_evaluate_object_setter_tests();
   run_evaluate_edit_rule_tests();
   run_device_tests();
   run_clock_tests();

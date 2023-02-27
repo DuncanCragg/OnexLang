@@ -72,52 +72,6 @@ bool evaluate_light_logic(object* o, void* d)
   return changed;
 }
 
-void apply_update(object* o, properties* update)
-{
-  uint16_t n=properties_size(update);
-  for(int i=1; i<=n; i++){
-    char* key=properties_key_n(update, i);
-    item* upd=properties_get_n(update, i);
-    if(item_is_type(upd,ITEM_LIST)){
-      list* li=(list*)upd;
-      uint16_t s=list_size(li);
-      uint16_t arrow=list_find(li, (item*)value_new("=>"));
-      uint16_t arrowdel=list_find(li, (item*)value_new("(=>)"));
-      if(arrow){
-        if(arrow+1>s){
-          object_property_set(o, key, 0);
-          continue;
-        }
-        if(arrow+1==s){
-          item* r = list_get_n(li, arrow+1);
-          if(item_is_type(r, ITEM_VALUE)){
-            object_property_set(o, key, value_string((value*)r));
-          }
-          continue;
-        }
-        item* r1 = list_get_n(li, arrow+1);
-        item* r2 = list_get_n(li, arrow+2);
-        if(item_is_type(r1, ITEM_VALUE) && item_is_type(r2, ITEM_VALUE)){
-          if(item_equal(r1, value_new("@."))){
-            object_property_add(o, key, value_string((value*)r2));
-          }
-        }
-      }
-      if(arrowdel){
-        char delkey[128]; snprintf(delkey, 128, "%s:%d", key, arrowdel);
-        object_property_set(o, delkey, 0);
-      }
-    }
-  }
-  properties_free(update, true);
-}
-
-bool evaluate_object_setter(object* o, void* d)
-{
-  if(d) apply_update(o, (properties*)d);
-  return true;
-}
-
 void apply_edit(object* o)
 {
   uint16_t n=object_property_size(o, "Alerted:");
