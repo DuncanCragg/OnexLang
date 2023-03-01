@@ -3,14 +3,13 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
+#include <onex-kernel/lib.h>
 #include <onex-kernel/log.h>
 #include <onex-kernel/mem.h>
 #include <onex-kernel/time.h>
 #include <items.h>
 #include <onn.h>
 #include <onr.h>
-
-extern char* prefix_char_in_place(char* s, char prefix, char target);
 
 bool evaluate_edit_rule(object* o, void* d) {
 
