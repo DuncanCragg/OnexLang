@@ -49,6 +49,19 @@ void run_evaluate_edit_rule_tests() {
   object_property_set(edit, "fruits\\:2", 0);
   onex_loop();
   onex_assert(     !object_property(target, "fruits"),               "evaluate_edit_rule set fruits to nothing");
+
+  // ----- set in list -------
+
+  object_property_set(edit, "fruits", "=> @. fig orange mango banana papaya");
+  onex_loop();
+  object_property_set(edit, "fruits", 0);
+  object_property_set(edit, "fruits\\:1", "=> potato");
+  object_property_set(edit, "fruits\\:3", "=>");
+  onex_loop();
+  onex_assert_equal(object_property(target, "fruits:1"), "potato", "evaluate_edit_rule sets fruits:1 to potato");
+  onex_assert_equal(object_property(target, "fruits:2"), "orange", "evaluate_edit_rule leaves value");
+  onex_assert_equal(object_property(target, "fruits:3"), "banana", "evaluate_edit_rule has deleted mango");
+  onex_assert_equal(object_property(target, "fruits:4"), "papaya", "evaluate_edit_rule leaves value");
 }
 
 
