@@ -79,6 +79,7 @@ $(SDK_INCLUDES) \
 
 
 TESTS_SOURCES = \
+./tests/test-rules.c \
 ./tests/test-behaviours.c \
 ./tests/main.c \
 
