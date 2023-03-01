@@ -56,9 +56,9 @@ void run_tests_maybe()
   onex_init("");
 
   run_light_tests();
-  run_evaluate_edit_rule_tests();
   run_device_tests();
   run_clock_tests();
+  run_evaluate_edit_rule_tests();
 
 #if defined(NRF5)
   int failures=onex_assert_summary();

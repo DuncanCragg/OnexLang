@@ -93,6 +93,7 @@ LIGHT_SOURCES = \
 
 
 LIB_SOURCES = \
+./src/edit-rules.c \
 ./src/behaviours.c \
 
 #-------------------------------------------------------------------------------
