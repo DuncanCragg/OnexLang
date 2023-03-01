@@ -17,7 +17,7 @@ bool evaluate_edit_rule(object* o, void* d) {
        object_property_contains(o, "Alerted:is", "rule")   )) return true;
 
   uint16_t n=object_property_size(o, "Alerted:");
-  for(int i=1; i<=n; i++){
+  for(uint16_t i=1; i<=n; i++){
 
     char* key=object_property_key(o, "Alerted:", i);
     if(!strcmp(key, "is")) continue;
@@ -27,19 +27,14 @@ bool evaluate_edit_rule(object* o, void* d) {
     char pathkey[128]; snprintf(pathkey, 128, "Alerted:%s", keyesc);
     uint16_t ln = object_property_length(o, pathkey);
 
-    int arrowindex=0;
-    int atdotindex=0;
-    int j=1;
-    for(; j<=ln; j++){
+    uint16_t arrowindex=0;
+    uint16_t atdotindex=0;
+
+    for(uint16_t j=1; j<=ln; j++){
       char* val=object_property_get_n(o, pathkey, j);
       if(!arrowindex){
         if(!strcmp(val, "=>")){
           arrowindex=j;
-        }
-        if(!strcmp(val, "(=>)")){
-          char delkey[128]; snprintf(delkey, 128, "%s:%d", key, j);
-          object_property_set(o, delkey, 0);
-          return true;
         }
         continue;
       }
