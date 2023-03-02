@@ -30,28 +30,41 @@ bool evaluate_edit_rule(object* o, void* d) {
     uint16_t arrowindex=0;
     uint16_t atdotindex=0;
 
-    for(uint16_t j=1; j<=ln; j++){
-      char* val=object_property_get_n(o, pathkey, j);
+    uint16_t j=1;
+    for(; j<=ln; j++){
+      char* token=object_property_get_n(o, pathkey, j);
       if(!arrowindex){
-        if(!strcmp(val, "=>")){
+        if(!strcmp(token, "=>")){
           arrowindex=j;
         }
         continue;
       }
-      else{
-        if(!atdotindex){
-          if(!strcmp(val, "@.")){
-            if(j==arrowindex+1) atdotindex=j;
-            continue;
-          }
-          object_property_set(o, key, val);
-          atdotindex=j;
-        }
-        else object_property_add(o, key, val);
+      if(!strcmp(token, "@.")){
+        atdotindex=j;
+        break;
       }
     }
+    if(!arrowindex) continue;
+
     if(arrowindex==ln){
       object_property_set(o, key, 0);
+      continue;
+    }
+    if(!atdotindex){
+      for(j=arrowindex+1; j<=ln; j++){
+        char* token=object_property_get_n(o, pathkey, j);
+        if(j==arrowindex+1) object_property_set(o, key, token);
+        else                object_property_append(o, key, token);
+      }
+      continue;
+    }
+    for(j=atdotindex-1; j>arrowindex; j--){
+      char* token=object_property_get_n(o, pathkey, j);
+      object_property_prepend(o, key, token);
+    }
+    for(j=atdotindex+1; j<=ln; j++){
+      char* token=object_property_get_n(o, pathkey, j);
+      object_property_append(o, key, token);
     }
   }
   return true;
