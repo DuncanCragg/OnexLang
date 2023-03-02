@@ -42,13 +42,13 @@ void run_evaluate_edit_rule_tests() {
   object_property_set(edit, "fruits", 0);
   object_property_set(edit, "fruits\\:2", "=>");
   onex_loop();
-  onex_assert_equal(object_property(target, "fruits:1"), "mango",    "evaluate_edit_rule set fruits to 'mango fig'");
-  onex_assert_equal(object_property(target, "fruits:2"), "fig",      "evaluate_edit_rule set fruits to 'mango fig'");
+  onex_assert_equal(object_property(target, "fruits:1"), "mango",    "evaluate_edit_rule deletes 'orange'");
+  onex_assert_equal(object_property(target, "fruits:2"), "fig",      "evaluate_edit_rule deletes 'orange'");
 
   object_property_set(edit, "fruits", "=>");
   object_property_set(edit, "fruits\\:2", 0);
   onex_loop();
-  onex_assert(     !object_property(target, "fruits"),               "evaluate_edit_rule set fruits to nothing");
+  onex_assert(     !object_property(target, "fruits"),               "evaluate_edit_rule deletes all fruit");
 
   // ----- set in list -------
 
