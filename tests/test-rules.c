@@ -54,9 +54,9 @@ void run_evaluate_edit_rule_tests() {
 
   object_property_set(edit, "fruits", "=> mango @. banana");
   onex_loop();
-  object_property_set(edit, "fruits", "=> fig orange @.");
+  object_property_set(edit, "fruits", "=> orange @. papaya");
   onex_loop();
-  object_property_set(edit, "fruits", "=> @. papaya apple");
+  object_property_set(edit, "fruits", "=> fig @. apple");
   onex_loop();
 
   onex_assert_equal(object_property(target, "fruits:1"), "fig",    "evaluate_edit_rule sets fruits:1 to fig");
