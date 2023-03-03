@@ -21,6 +21,8 @@ bool evaluate_edit_rule(object* o, void* d) {
 
     char* key=object_property_key(o, "Alerted:", i);
     if(!strcmp(key, "is")) continue;
+    if(!strcmp(key, "edit-target")) continue;
+    if(!strcmp(key, "edit-user")) continue;
 
     char keyesc[128]; mem_strncpy(keyesc, key, 128);
     prefix_char_in_place(keyesc, '\\', ':');
