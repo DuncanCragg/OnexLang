@@ -60,13 +60,28 @@ bool evaluate_edit_rule(object* o, void* d) {
       }
       continue;
     }
-    for(j=atdotindex-1; j>arrowindex; j--){
-      char* token=object_property_get_n(o, pathkey, j);
-      object_property_prepend(o, key, token);
+    char keyind[128];
+    if(ln >atdotindex){
+      if(find_unescaped_colon(key)){
+        snprintf(keyind, 128, "%s", key);
+      }else{
+        uint16_t lnk = object_property_length(o, key);
+        if(!lnk) lnk=1;
+        snprintf(keyind, 128, "%s:%d", key, lnk);
+      }
     }
-    for(j=atdotindex+1; j<=ln; j++){
-      char* token=object_property_get_n(o, pathkey, j);
-      object_property_append(o, key, token);
+    for(j=ln; j>arrowindex; j--){
+      if(j >atdotindex){
+        char* token=object_property_get_n(o, pathkey, j);
+        object_property_append(o, keyind, token);
+        continue;
+      }
+      if(j==atdotindex) continue;
+      if(j< atdotindex){
+        char* token=object_property_get_n(o, pathkey, j);
+        object_property_prepend(o, key, token);
+        continue;
+      }
     }
   }
   return true;

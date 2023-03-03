@@ -83,9 +83,7 @@ void run_evaluate_edit_rule_tests() {
 
   object_property_set(edit, "fruits", "=> mango @. banana");
   onex_loop();
-  object_property_set(edit, "fruits", "=> orange @. papaya");
-  onex_loop();
-  object_property_set(edit, "fruits", "=> fig @. apple");
+  object_property_set(edit, "fruits", "=> fig orange @. papaya apple");
   onex_loop();
   onex_assert_equal(object_property(target, "fruits:1"), "fig",    "evaluate_edit_rule sets fruits:1 to fig");
   onex_assert_equal(object_property(target, "fruits:2"), "orange", "evaluate_edit_rule sets fruits:2 to orange");
@@ -169,6 +167,18 @@ void run_evaluate_edit_rule_tests() {
   onex_loop();
   onex_assert_equal_num(object_property_length(target, "fruits"), 13,  "evaluate_edit_rule can't append on size+2");
   object_property_set(edit, "fruits\\:15", 0);
+
+  object_property_set(edit, "fruits\\:12", "=> cranberry gravy @. mustard tartare");
+  onex_loop();
+  onex_assert_equal(object_property(target, "fruits:11"), "peas",      "evaluate_edit_rule indexed prepend and append");
+  onex_assert_equal(object_property(target, "fruits:12"), "cranberry", "evaluate_edit_rule indexed prepend and append");
+  onex_assert_equal(object_property(target, "fruits:13"), "gravy",     "evaluate_edit_rule indexed prepend and append");
+  onex_assert_equal(object_property(target, "fruits:14"), "turnip",    "evaluate_edit_rule indexed prepend and append");
+  onex_assert_equal(object_property(target, "fruits:15"), "mustard",   "evaluate_edit_rule indexed prepend and append");
+  onex_assert_equal(object_property(target, "fruits:16"), "tartare",   "evaluate_edit_rule indexed prepend and append");
+  onex_assert_equal(object_property(target, "fruits:17"), "beans",     "evaluate_edit_rule indexed prepend and append");
+  onex_assert_equal_num(object_property_length(target, "fruits"), 17,  "evaluate_edit_rule fruits is len 17");
+  object_property_set(edit, "fruits\\:12", 0);
 }
 
 
