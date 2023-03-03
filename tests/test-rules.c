@@ -137,7 +137,18 @@ void run_evaluate_edit_rule_tests() {
   onex_assert_equal(object_property(target, "fruits:4"), "swedes",    "evaluate_edit_rule inserts swedes");
   onex_assert_equal(object_property(target, "fruits:5"), "orange",    "evaluate_edit_rule leaves value");
   onex_assert_equal(object_property(target, "fruits:6"), "banana",    "evaluate_edit_rule leaves value");
+  onex_assert_equal_num(object_property_length(target, "fruits"), 8,  "evaluate_edit_rule fruits is len 8");
   object_property_set(edit, "fruits\\:3", 0);
+
+  object_property_set(edit, "fruits\\:1", "=> sprouts broccoli cabbage");
+  onex_loop();
+  onex_assert_equal(object_property(target, "fruits:1"), "sprouts",   "evaluate_edit_rule replaces grapes with veg");
+  onex_assert_equal(object_property(target, "fruits:2"), "broccoli",  "evaluate_edit_rule replaces grapes with veg");
+  onex_assert_equal(object_property(target, "fruits:3"), "cabbage",   "evaluate_edit_rule replaces grapes with veg");
+  onex_assert_equal(object_property(target, "fruits:4"), "tangerine", "evaluate_edit_rule leaves 2nd");
+  onex_assert_equal_num(object_property_length(target, "fruits"), 10, "evaluate_edit_rule fruits is len 10");
+  object_property_set(edit, "fruits\\:1", 0);
+
 }
 
 
