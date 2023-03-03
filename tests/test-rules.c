@@ -32,25 +32,44 @@ void run_evaluate_edit_rule_tests() {
   onex_assert_equal(object_property(target, "fruits:1"), "mango",    "evaluate_edit_rule set fruits to 'mango orange'");
   onex_assert_equal(object_property(target, "fruits:2"), "orange",   "evaluate_edit_rule set fruits to 'mango orange'");
 
-  object_property_set(edit, "fruits", "=> @. fig");
+  object_property_set(edit, "fruits", "=> @. fig banana tangerine");
   onex_loop();
-  onex_assert_equal(object_property(target, "fruits:1"), "mango",    "evaluate_edit_rule set fruits to 'mango orange fig'");
-  onex_assert_equal(object_property(target, "fruits:2"), "orange",   "evaluate_edit_rule set fruits to 'mango orange fig'");
-  onex_assert_equal(object_property(target, "fruits:3"), "fig",      "evaluate_edit_rule set fruits to 'mango orange fig'");
+  onex_assert_equal(object_property(target, "fruits:1"), "mango",     "evaluate_edit_rule set fruits to 'mango orange fig banana tangerine'");
+  onex_assert_equal(object_property(target, "fruits:2"), "orange",    "evaluate_edit_rule set fruits to 'mango orange fig banana tangerine'");
+  onex_assert_equal(object_property(target, "fruits:3"), "fig",       "evaluate_edit_rule set fruits to 'mango orange fig banana tangerine'");
+  onex_assert_equal(object_property(target, "fruits:4"), "banana",    "evaluate_edit_rule set fruits to 'mango orange fig banana tangerine'");
+  onex_assert_equal(object_property(target, "fruits:5"), "tangerine", "evaluate_edit_rule set fruits to 'mango orange fig banana tangerine'");
 
   object_property_set(edit, "fruits", 0);
 
   // ----- delete from list -------
 
-  object_property_set(edit, "fruits\\:2", "=>");
+  object_property_set(edit, "fruits\\:3", "=>");
   onex_loop();
-  onex_assert_equal(object_property(target, "fruits:1"), "mango",    "evaluate_edit_rule deletes 'orange'");
-  onex_assert_equal(object_property(target, "fruits:2"), "fig",      "evaluate_edit_rule deletes 'orange'");
-  object_property_set(edit, "fruits\\:2", 0);
+  onex_assert_equal(object_property(target, "fruits:1"), "mango",     "evaluate_edit_rule deletes middle item: 'fig'");
+  onex_assert_equal(object_property(target, "fruits:2"), "orange",    "evaluate_edit_rule deletes middle item: 'fig'");
+  onex_assert_equal(object_property(target, "fruits:3"), "banana",    "evaluate_edit_rule deletes middle item: 'fig'");
+  onex_assert_equal(object_property(target, "fruits:4"), "tangerine", "evaluate_edit_rule deletes middle item: 'fig'");
+  object_property_set(edit, "fruits\\:3", 0);
+
+  object_property_set(edit, "fruits\\:1", "=>");
+  onex_loop();
+  onex_assert_equal(object_property(target, "fruits:1"), "orange",    "evaluate_edit_rule deletes first item 'mango'");
+  onex_assert_equal(object_property(target, "fruits:2"), "banana",    "evaluate_edit_rule deletes first item 'mango'");
+  onex_assert_equal(object_property(target, "fruits:3"), "tangerine", "evaluate_edit_rule deletes first item 'mango'");
+  object_property_set(edit, "fruits\\:1", 0);
+
+  object_property_set(edit, "fruits\\:3", "=>");
+  onex_loop();
+  onex_assert_equal(object_property(target, "fruits:1"), "orange",    "evaluate_edit_rule deletes last item 'tangerine'");
+  onex_assert_equal(object_property(target, "fruits:2"), "banana",    "evaluate_edit_rule deletes last item 'tangerine'");
+  onex_assert_equal_num(object_property_length(target, "fruits"), 2,  "evaluate_edit_rule fruits is len 2 ");
+  object_property_set(edit, "fruits\\:3", 0);
 
   object_property_set(edit, "fruits", "=>");
   onex_loop();
-  onex_assert(     !object_property(target, "fruits"),               "evaluate_edit_rule deletes all fruit");
+  onex_assert(         !object_property(       target, "fruits"),     "evaluate_edit_rule deletes all fruit");
+  onex_assert_equal_num(object_property_length(target, "fruits"), 0,  "evaluate_edit_rule fruits is len 2 ");
   object_property_set(edit, "fruits", 0);
 
   // ----- set in list -------
