@@ -149,6 +149,15 @@ void run_evaluate_edit_rule_tests() {
   onex_assert_equal_num(object_property_length(target, "fruits"), 10, "evaluate_edit_rule fruits is len 10");
   object_property_set(edit, "fruits\\:1", 0);
 
+  object_property_set(edit, "fruits\\:11", "=> peas courgette");
+  onex_loop();
+  object_log(target);
+  onex_assert_equal(object_property(target, "fruits:10"), "apple",     "evaluate_edit_rule can append multi to size+1");
+  onex_assert_equal(object_property(target, "fruits:11"), "peas",      "evaluate_edit_rule can append multi to size+1");
+  onex_assert_equal(object_property(target, "fruits:12"), "courgette", "evaluate_edit_rule can append multi to size+1");
+  onex_assert_equal_num(object_property_length(target, "fruits"), 12,  "evaluate_edit_rule fruits is len 12");
+  object_property_set(edit, "fruits\\:11", 0);
+
 }
 
 

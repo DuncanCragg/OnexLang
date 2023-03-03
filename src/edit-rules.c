@@ -53,10 +53,10 @@ bool evaluate_edit_rule(object* o, void* d) {
       continue;
     }
     if(!atdotindex){
+      object_property_set(o, key, 0);
       for(j=ln; j>arrowindex; j--){
         char* token=object_property_get_n(o, pathkey, j);
-        if(j==ln) object_property_set(o, key, token);
-        else      object_property_insert(o, key, token);
+        object_property_insert(o, key, token);
       }
       continue;
     }
