@@ -42,7 +42,7 @@ bool evaluate_light_logic(object* o, void* d)
 
   if(!light_on && (
        object_property_is(o, "button:state",   "down") ||
-       object_property_is(o, "touch:action:1", "down") ||
+       object_property_is(o, "touch:action",   "down") ||
        object_property_is(o, "motion:gesture", "view-screen"))){
 
     light_on=true;
