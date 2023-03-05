@@ -59,6 +59,7 @@ bool evaluate_light_logic(object* o, void* d)
     }
   }
 
+  ;  object_property(o, "button:is"); // observe the button
   if(object_property(o, "touch:is") ||
      object_property(o, "motion:is")   ) return changed;
 
