@@ -99,6 +99,10 @@ bool evaluate_clock_sync(object* o, void* d)
   return true;
 }
 
+#if defined(NRF5)
+extern char __BUILD_TIMEZONE_OFFSET;
+#endif
+
 bool evaluate_clock(object* o, void* d)
 {
   uint64_t es=time_es();
@@ -122,15 +126,23 @@ bool evaluate_clock(object* o, void* d)
   object_property_set(o, "ts", ess);
 
   if(!object_property(o, "sync-clock")){
+    char*   zone=0;
+    int16_t offs=0;
+#if !defined(NRF5)
     time_t est = (time_t)es;
     struct tm tms={0};
     localtime_r(&est, &tms);
-    char t[32];
-#if !defined(NRF5)
-    snprintf(t, 32, "%s %ld", tms.tm_zone, tms.tm_gmtoff);
+    zone=tms.tm_zone;
+    offs=tms.tm_gmtoff;
 #else
-    snprintf(t, 32, "GMT 0");
+    offs=(int16_t)(int32_t)&__BUILD_TIMEZONE_OFFSET;
+    if(offs==3600) zone="BST"; // probably...
+    else
+    if(offs==0)    zone="GMT";
+    else           zone="XXX"; // probably not...
 #endif
+    char t[32];
+    snprintf(t, 32, "%s %d", zone, offs);
     object_property_set(o, "tz", t);
   }
 
