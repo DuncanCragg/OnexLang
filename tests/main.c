@@ -53,7 +53,7 @@ void run_tests_maybe()
 
   log_write("ONR tests\n");
 
-  onex_init("");
+  onex_init(0);
 
   run_light_tests();
   run_device_tests();
