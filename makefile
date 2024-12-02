@@ -129,7 +129,7 @@ libonex-lang-nrf.a: $(LIB_SOURCES:.c=.o)
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-ar rcs $@ $^
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-strip -g $@
 
-nrf.tests: libonex-lang-nrf.a $(EXE_SOURCES:.c=.o)
+nrf.tests.dongle: libonex-lang-nrf.a $(EXE_SOURCES:.c=.o)
 	rm -rf okolo
 	mkdir okolo
 	ar x ../OnexKernel/libonex-kernel-dongle.a --output okolo
@@ -139,7 +139,20 @@ nrf.tests: libonex-lang-nrf.a $(EXE_SOURCES:.c=.o)
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-objcopy -O binary ./onex-lang.out ./onex-lang.bin
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-objcopy -O ihex   ./onex-lang.out ./onex-lang.hex
 
-dongle-flash: nrf.tests
+nrf.tests.feather-sense: libonex-lang-nrf.a $(EXE_SOURCES:.c=.o)
+	rm -rf okolo
+	mkdir okolo
+	ar x ../OnexKernel/libonex-kernel-feather-sense.a --output okolo
+	ar x             ./libonex-lang-nrf.a             --output okolo
+	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-gcc $(LINKER_FLAGS) $(LD_FILES_DONGLE) -Wl,-Map=./onex-lang.map -o ./onex-lang.out $(EXE_SOURCES:.c=.o) okolo/*
+	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-size ./onex-lang.out
+	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-objcopy -O binary ./onex-lang.out ./onex-lang.bin
+	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-objcopy -O ihex   ./onex-lang.out ./onex-lang.hex
+
+feather-sense-flash: nrf.tests.feather-sense
+	uf2conv.py onex-lang.hex --family 0xada52840 --output onex-lang.uf2
+
+dongle-flash: nrf.tests.dongle
 	nrfutil pkg generate --hw-version 52 --sd-req 0xCA --application-version 1 --application ./onex-lang.hex --key-file $(PRIVATE_PEM) dfu.zip
 	nrfutil dfu usb-serial -pkg dfu.zip -p /dev/ttyACM0 -b 115200
 

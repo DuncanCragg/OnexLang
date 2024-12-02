@@ -73,7 +73,7 @@ tests.x86: LD=/usr/bin/gcc
 tests.x86: TARGET=TARGET_X86
 tests.x86: CHANNELS=-DONP_CHANNEL_SERIAL
 tests.x86: libonex-lang-x86.a $(TESTS_SOURCES:.c=.o)
-	$(LD) $(TESTS_SOURCES:.c=.o) -pthread -L. -lonex-lang-x86 -L../OnexKernel -lonex-kernel-x86 -o $@
+	$(LD) $(TESTS_SOURCES:.c=.o) -pthread -L. -lonex-lang-x86 -L../OnexKernel -lonex-kernel-xcb -o $@
 
 button.x86: COMPILE_LINE=$(X86_FLAGS) $(CC_FLAGS) $(X86_CC_SYMBOLS) $(INCLUDES)
 button.x86: CC=/usr/bin/gcc
@@ -81,7 +81,7 @@ button.x86: LD=/usr/bin/gcc
 button.x86: TARGET=TARGET_X86
 button.x86: CHANNELS=-DONP_CHANNEL_SERIAL
 button.x86: libonex-lang-x86.a $(BUTTON_SOURCES:.c=.o)
-	$(LD) $(BUTTON_SOURCES:.c=.o) -pthread -L. -lonex-lang-x86 -L../OnexKernel -lonex-kernel-x86 -o $@
+	$(LD) $(BUTTON_SOURCES:.c=.o) -pthread -L. -lonex-lang-x86 -L../OnexKernel -lonex-kernel-xcb -o $@
 
 light.x86: COMPILE_LINE=$(X86_FLAGS) $(CC_FLAGS) $(X86_CC_SYMBOLS) $(INCLUDES)
 light.x86: CC=/usr/bin/gcc
@@ -89,7 +89,7 @@ light.x86: LD=/usr/bin/gcc
 light.x86: TARGET=TARGET_X86
 light.x86: CHANNELS=-DONP_CHANNEL_SERIAL
 light.x86: libonex-lang-x86.a $(LIGHT_SOURCES:.c=.o)
-	$(LD) $(LIGHT_SOURCES:.c=.o) -pthread -L. -lonex-lang-x86 -L../OnexKernel -lonex-kernel-x86 -o $@
+	$(LD) $(LIGHT_SOURCES:.c=.o) -pthread -L. -lonex-lang-x86 -L../OnexKernel -lonex-kernel-xcb -o $@
 
 #-------------------------------------------------------------------------------
 
