@@ -15,9 +15,9 @@ static bool discover_io_peer(object* o, char* property, char* is)
 
   if(object_property_contains(o, ispath, is)) return true;
 
-  int ln=object_property_length(o, "device:connected-devices:io");
+  int ln=object_property_length(o, "device:peers:io");
   for(int i=1; i<=ln; i++){
-    char* uid=object_property_get_n(o, "device:connected-devices:io", i);
+    char* uid=object_property_get_n(o, "device:peers:io", i);
     if(!is_uid(uid)) continue;
     object_property_set(o, property, uid);
     if(object_property_contains(o, ispath, is)) return true;
@@ -77,8 +77,8 @@ bool evaluate_device_logic(object* o, void* d)
 {
   if(object_property_contains(o, "Alerted:is", "device")){
     char* devuid=object_property(o, "Alerted");
-    if(!object_property_contains(o, "connected-devices", devuid)){
-      object_property_add(o, "connected-devices", devuid);
+    if(!object_property_contains(o, "peers", devuid)){
+      object_property_add(o, "peers", devuid);
     }
   }
   return true;

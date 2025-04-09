@@ -87,7 +87,7 @@ void run_device_tests()
   object_property_set(incomingdevice, "is", "device");
   onex_loop();
 
-  onex_assert_equal(object_property(onex_device_object, "connected-devices"), "uid-incomingdevice", "device evaluator adds incoming device to connected-devices");
+  onex_assert_equal(object_property(onex_device_object, "peers"), "uid-incomingdevice", "device evaluator adds incoming device to peers");
 }
 
 void run_clock_tests()
