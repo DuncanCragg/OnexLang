@@ -46,14 +46,10 @@ int main()
   serial_init(0,0);
 #endif
 #endif
-  onex_init("");
+  onex_init("button.db");
 
 #if defined(BOARD_PCA10059)
   gpio_mode_cb(BUTTON_1, INPUT_PULLUP, RISING_AND_FALLING, button_changed);
-#elif defined(BOARD_PINETIME)
-  gpio_mode_cb(BUTTON_1, INPUT_PULLDOWN, RISING_AND_FALLING, button_changed);
-  gpio_mode(   BUTTON_ENABLE, OUTPUT);
-  gpio_set(    BUTTON_ENABLE, 1);
 #else
   log_write("\n------Starting Button Test-----\n");
 #endif
@@ -76,6 +72,7 @@ int main()
   buttonuid=object_property(button, "UID");
 
   object* oclock=object_new(0, "evaluate_clock", "clock event", 12);
+  object_set_persist(oclock, "none");
   object_property_set(oclock, "title", "OnexOS Button Clock");
   object_property_set(oclock, "ts", "%%unknown");
 #if defined(SYNC_TO_PEER_CLOCK)

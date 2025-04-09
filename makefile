@@ -24,32 +24,17 @@ EXE_DEFINES =
 
 ifeq ($(TESTS), '1')
  EXE_SOURCES += $(TESTS_SOURCES)
-#EXE_DEFINES += -DLOG_TO_BLE
- EXE_DEFINES += -DLOG_TO_SERIAL
  EXE_DEFINES += -DHAS_SERIAL
-#EXE_DEFINES += -DONP_CHANNEL_SERIAL
-#EXE_DEFINES += -DONP_OVER_SERIAL
-#EXE_DEFINES += -DONP_DEBUG
 endif
 
 ifeq ($(BUTTON), '1')
  EXE_SOURCES += $(BUTTON_SOURCES)
- EXE_DEFINES += -DLOG_TO_BLE
-#EXE_DEFINES += -DLOG_TO_SERIAL
  EXE_DEFINES += -DHAS_SERIAL
- EXE_DEFINES += -DONP_CHANNEL_SERIAL
- EXE_DEFINES += -DONP_OVER_SERIAL
-#EXE_DEFINES += -DONP_DEBUG
 endif
 
 ifeq ($(LIGHT), '1')
  EXE_SOURCES += $(LIGHT_SOURCES)
- EXE_DEFINES += -DLOG_TO_BLE
-#EXE_DEFINES += -DLOG_TO_SERIAL
  EXE_DEFINES += -DHAS_SERIAL
- EXE_DEFINES += -DONP_CHANNEL_SERIAL
- EXE_DEFINES += -DONP_OVER_SERIAL
-#EXE_DEFINES += -DONP_DEBUG
 endif
 
 #-------------------------------------------------------------------------------
@@ -153,7 +138,7 @@ feather-sense-flash: nrf.tests.feather-sense
 	uf2conv.py onex-lang.hex --family 0xada52840 --output onex-lang.uf2
 
 dongle-flash: nrf.tests.dongle
-	nrfutil pkg generate --hw-version 52 --sd-req 0xCA --application-version 1 --application ./onex-lang.hex --key-file $(PRIVATE_PEM) dfu.zip
+	nrfutil pkg generate --hw-version 52 --sd-req 0x00 --application-version 1 --application ./onex-lang.hex --key-file $(PRIVATE_PEM) dfu.zip
 	nrfutil dfu usb-serial -pkg dfu.zip -p /dev/ttyACM0 -b 115200
 
 #-------------------------------------------------------------------------------

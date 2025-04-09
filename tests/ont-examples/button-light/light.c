@@ -37,13 +37,11 @@ int main()
   serial_init(0,0);
 #endif
 #endif
-  onex_init("");
+  onex_init("light.db");
 
 #if defined(BOARD_PCA10059)
   gpio_mode(LED1_G, OUTPUT);
   gpio_mode(LED2_B, OUTPUT);
-#elif defined(BOARD_PINETIME)
-  gpio_mode(LED_3, OUTPUT);
 #else
   log_write("\n------Starting Light Test-----\n");
 #endif
@@ -65,6 +63,7 @@ int main()
   lightuid=object_property(light, "UID");
 
   object* oclock=object_new(0, "evaluate_clock", "clock event", 12);
+  object_set_persist(oclock, "none");
   object_property_set(oclock, "title", "OnexOS Light Clock");
   object_property_set(oclock, "ts", "%%unknown");
 #if defined(SYNC_TO_PEER_CLOCK)
@@ -81,8 +80,6 @@ int main()
 #if defined(BOARD_PCA10059)
   gpio_set(LED1_G,  LEDS_ACTIVE_STATE);
   gpio_set(LED2_B, !LEDS_ACTIVE_STATE);
-#elif defined(BOARD_PINETIME)
-  gpio_set(LED_3, !LEDS_ACTIVE_STATE);
 #endif
   while(1) onex_loop();
 }
@@ -93,14 +90,10 @@ bool evaluate_light_io(object* light, void* d)
   if(object_property_is(light, "light", "on")){
 #if defined(BOARD_PCA10059)
     gpio_set(LED2_B, LEDS_ACTIVE_STATE);
-#elif defined(BOARD_PINETIME)
-    gpio_set(LED_3, LEDS_ACTIVE_STATE);
 #endif
   } else {
 #if defined(BOARD_PCA10059)
     gpio_set(LED2_B, !LEDS_ACTIVE_STATE);
-#elif defined(BOARD_PINETIME)
-    gpio_set(LED_3, !LEDS_ACTIVE_STATE);
 #endif
   }
 #else

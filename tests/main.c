@@ -1,9 +1,6 @@
 
 #if defined(NRF5)
 #include <boards.h>
-#if defined(BOARD_PINETIME)
-#include <onex-kernel/gfx.h>
-#endif
 #include <onex-kernel/gpio.h>
 #if defined(HAS_SERIAL)
 #include <onex-kernel/serial.h>
@@ -29,9 +26,6 @@ static void set_up_gpio(void)
 #if defined(BOARD_PCA10059)
   for(uint8_t l=0; l< LEDS_NUMBER; l++){ gpio_mode(leds_list[l], OUTPUT); gpio_set(leds_list[l], 1); }
   gpio_set(leds_list[0], 0);
-#elif defined(BOARD_PINETIME)
-  gpio_mode(LCD_BACKLIGHT_HIGH, OUTPUT);
-  gpio_set(LCD_BACKLIGHT_HIGH, LEDS_ACTIVE_STATE);
 #endif
 }
 #endif
@@ -64,9 +58,6 @@ void run_tests_maybe()
 #if defined(BOARD_PCA10059)
   if(failures) gpio_set(leds_list[1], 0);
   else         gpio_set(leds_list[2], 0);
-#elif defined(BOARD_PINETIME)
-  gfx_pos(10, 10);
-  gfx_text(failures? "FAIL": "SUCCESS");
 #endif
 #else
   onex_assert_summary();
@@ -85,15 +76,6 @@ int main(void)
   time_ticker((void (*)())serial_loop, 1);
   while(1) run_tests_maybe();
 #else
-#if defined(BOARD_PINETIME)
-  gfx_reset();
-  gfx_init();
-  gfx_screen_colour(0x0);
-  gfx_screen_fill();
-  gfx_pos(10, 10);
-  gfx_text_colour(GFX_BLUE);
-  gfx_text("OnexLang");
-#endif
   set_up_gpio();
   while(1){
     log_loop();
