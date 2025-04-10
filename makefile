@@ -15,30 +15,6 @@ PRIVATE_PEM = ../OnexKernel/doc/local/private.pem
 
 #-------------------------------------------------------------------------------
 
-TESTS = '1'
-BUTTON ='0'
-LIGHT = '0'
-
-EXE_SOURCES =
-EXE_DEFINES =
-
-ifeq ($(TESTS), '1')
- EXE_SOURCES += $(TESTS_SOURCES)
- EXE_DEFINES += -DHAS_SERIAL
-endif
-
-ifeq ($(BUTTON), '1')
- EXE_SOURCES += $(BUTTON_SOURCES)
- EXE_DEFINES += -DHAS_SERIAL
-endif
-
-ifeq ($(LIGHT), '1')
- EXE_SOURCES += $(LIGHT_SOURCES)
- EXE_DEFINES += -DHAS_SERIAL
-endif
-
-#-------------------------------------------------------------------------------
-
 COMPILER_DEFINES = \
 -DAPP_TIMER_V2 \
 -DAPP_TIMER_V2_RTC1_ENABLED \
@@ -65,21 +41,15 @@ $(SDK_INCLUDES) \
 
 TESTS_SOURCES = \
 ./tests/test-rules.c \
-./tests/test-behaviours.c \
 ./tests/main.c \
 
 
-BUTTON_SOURCES = \
-./tests/ont-examples/button-light/button.c \
-
-
-LIGHT_SOURCES = \
-./tests/ont-examples/button-light/light.c \
+EXE_SOURCES += $(TESTS_SOURCES)
+EXE_DEFINES += -DHAS_SERIAL
 
 
 LIB_SOURCES = \
 ./src/edit-rules.c \
-./src/behaviours.c \
 
 #-------------------------------------------------------------------------------
 

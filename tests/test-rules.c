@@ -12,7 +12,7 @@
 
 void run_evaluate_edit_rule_tests() {
 
-  log_write("------edit rule behaviour tests-----\n");
+  log_write("------edit rule tests-----\n");
 
   onex_set_evaluators("evaluate_edit_rule", evaluate_edit_rule, 0);
 

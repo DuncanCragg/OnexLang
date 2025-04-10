@@ -11,10 +11,7 @@
 #include <tests.h>
 #include <onn.h>
 
-extern void run_light_tests();
 extern void run_evaluate_edit_rule_tests();
-extern void run_device_tests();
-extern void run_clock_tests();
 
 #if defined(NRF5)
 #if defined(BOARD_PCA10059)
@@ -48,9 +45,6 @@ void run_tests_maybe()
 
   onex_init(0);
 
-  run_light_tests();
-  run_device_tests();
-  run_clock_tests();
   run_evaluate_edit_rule_tests();
 
 #if defined(NRF5)
