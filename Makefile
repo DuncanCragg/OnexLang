@@ -36,7 +36,6 @@ libonex-lang-arm.a: CC=/home/duncan/x-tools/aarch64-unknown-linux-gnu/bin/aarch6
 libonex-lang-arm.a: LD=/home/duncan/x-tools/aarch64-unknown-linux-gnu/bin/aarch64-unknown-linux-gnu-gcc
 libonex-lang-arm.a: AR=/home/duncan/x-tools/aarch64-unknown-linux-gnu/bin/aarch64-unknown-linux-gnu-ar
 libonex-lang-arm.a: TARGET=TARGET_ARM
-libonex-lang-arm.a: CHANNELS=-DONP_CHANNEL_SERIAL
 libonex-lang-arm.a: $(LIB_SOURCES:.c=.o)
 	$(AR) rcs $@ $^
 
@@ -45,7 +44,6 @@ libonex-lang-x86.a: CC=/usr/bin/gcc
 libonex-lang-x86.a: LD=/usr/bin/gcc
 libonex-lang-x86.a: AR=/usr/bin/ar
 libonex-lang-x86.a: TARGET=TARGET_X86
-libonex-lang-x86.a: CHANNELS=-DONP_CHANNEL_SERIAL
 libonex-lang-x86.a: $(LIB_SOURCES:.c=.o)
 	$(AR) rcs $@ $^
 
@@ -53,7 +51,6 @@ tests.arm: COMPILE_LINE=$(ARM_FLAGS) $(CC_FLAGS) $(ARM_CC_SYMBOLS) $(INCLUDES)
 tests.arm: CC=/home/duncan/x-tools/aarch64-unknown-linux-gnu/bin/aarch64-unknown-linux-gnu-gcc
 tests.arm: LD=/home/duncan/x-tools/aarch64-unknown-linux-gnu/bin/aarch64-unknown-linux-gnu-gcc
 tests.arm: TARGET=TARGET_ARM
-tests.arm: CHANNELS=-DONP_CHANNEL_SERIAL
 tests.arm: libonex-lang-arm.a $(TESTS_SOURCES:.c=.o)
 	$(LD) $(TESTS_SOURCES:.c=.o) -pthread -L. -lonex-lang-arm -L../OnexKernel -lonex-kernel-arm -o $@
 
@@ -61,7 +58,6 @@ tests.x86: COMPILE_LINE=$(X86_FLAGS) $(CC_FLAGS) $(X86_CC_SYMBOLS) $(INCLUDES)
 tests.x86: CC=/usr/bin/gcc
 tests.x86: LD=/usr/bin/gcc
 tests.x86: TARGET=TARGET_X86
-tests.x86: CHANNELS=-DONP_CHANNEL_SERIAL
 tests.x86: libonex-lang-x86.a $(TESTS_SOURCES:.c=.o)
 	$(LD) $(TESTS_SOURCES:.c=.o) -pthread -L. -lonex-lang-x86 -L../OnexKernel -lonex-kernel-xcb -o $@
 
