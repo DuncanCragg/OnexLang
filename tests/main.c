@@ -43,7 +43,7 @@ void run_tests_maybe()
 
   log_write("ONR tests\n");
 
-  onex_init(0,0,0);
+  onex_init(0);
 
   run_evaluate_edit_rule_tests();
 
