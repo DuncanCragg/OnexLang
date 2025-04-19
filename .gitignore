@@ -8,6 +8,7 @@
 *.o
 *.out
 *.x86
+*.uf2
 ,*
 .*.sw?
 dfu.zip
