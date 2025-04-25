@@ -25,13 +25,13 @@ static void set_up_gpio(void)
 }
 #endif
 
+static volatile char char_recvd=0;
 static volatile bool run_tests=false;
 
-void on_recv(unsigned char* chars, size_t size)
-{
+void on_recv(unsigned char* chars, size_t size) {
   if(!size) return;
-  log_write(">%c<----------\n", chars[0]);
-  if(chars[0]=='t') run_tests=true;
+  char_recvd=chars[0];
+  if(char_recvd=='t') run_tests=true;
 }
 
 void run_tests_maybe()
@@ -72,12 +72,22 @@ int main(void)
   serial_init(0,(serial_recv_cb)on_recv,0);
   set_up_gpio();
   time_ticker((void (*)())serial_loop, 0, 1);
-  while(1) run_tests_maybe();
+  while(1){
+    if(char_recvd){
+      log_write(">%c<----------\n", char_recvd);
+      char_recvd=0;
+    }
+    run_tests_maybe();
+  }
 #else
   set_up_gpio();
   while(1){
-    log_loop();
+    if(char_recvd){
+      log_write(">%c<----------\n", char_recvd);
+      char_recvd=0;
+    }
     run_tests_maybe();
+    log_loop();
   }
 #endif
 #else
