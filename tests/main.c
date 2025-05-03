@@ -28,9 +28,15 @@ static void set_up_gpio(void)
 static volatile char char_recvd=0;
 static volatile bool run_tests=false;
 
-void on_recv(unsigned char* chars, size_t size) {
-  if(!size) return;
+void serial_cb(bool connect, char* tty) {
+  if(connect) return;
+#if defined(NRF5)
+  char chars[1024];
+  serial_read(chars, 1024);
   char_recvd=chars[0];
+#else
+  char_recvd='t';
+#endif
   if(char_recvd=='t') run_tests=true;
 }
 
@@ -69,7 +75,7 @@ int main(void)
 #if defined(NRF5)
   gpio_init();
 #if !defined(BOARD_MAGIC3)
-  serial_init(0,0,(serial_recv_cb)on_recv);
+  serial_init(0,0,serial_cb);
   set_up_gpio();
   time_ticker((void (*)())serial_loop, 0, 1);
   while(1){
@@ -91,7 +97,7 @@ int main(void)
   }
 #endif
 #else
-  on_recv((unsigned char*)"t", 1);
+  serial_cb(false, "tty");
   run_tests_maybe();
   time_end();
 #endif
