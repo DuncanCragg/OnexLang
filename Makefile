@@ -97,7 +97,7 @@ clean:
 	find src tests -name '*.o' -o -name '*.d' | xargs rm -f
 	rm -f ,* core
 	rm -rf *.arm *.x86 ol
-	find . -name onex.ondb | xargs rm -f
+	find . -name *.ondb | xargs rm -f
 	@echo "------------------------------"
 	@echo "files not cleaned:"
 	@git ls-files --others --exclude-from=.git/info/exclude | xargs -r ls -Fla
