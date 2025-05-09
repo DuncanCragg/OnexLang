@@ -15,20 +15,28 @@ PRIVATE_PEM = ../OnexKernel/doc/local/private.pem
 
 #-------------------------------------------------------------------------------
 
-COMPILER_DEFINES = \
+COMMON_DEFINES = \
 -DAPP_TIMER_V2 \
 -DAPP_TIMER_V2_RTC1_ENABLED \
 -DCONFIG_GPIO_AS_PINRESET \
 -DFLOAT_ABI_HARD \
 -DNRF5 \
--DNRF_SD_BLE_API_VERSION=7 \
--DSOFTDEVICE_PRESENT \
--DBOARD_PCA10059 \
--DNRF52840_XXAA \
--DS140 \
 -D__HEAP_SIZE=8192 \
 -D__STACK_SIZE=8192 \
-$(EXE_DEFINES) \
+-D_GNU_SOURCE \
+
+
+COMPILER_DEFINES_FEATHER_SENSE = \
+$(COMMON_DEFINES) \
+-DBOARD_FEATHER_SENSE \
+-DNRF52840_XXAA \
+
+
+COMPILER_DEFINES_DONGLE = \
+$(COMMON_DEFINES) \
+-DBOARD_PCA10059 \
+-DNRF52840_XXAA \
+
 
 
 INCLUDES = \
@@ -44,8 +52,6 @@ TESTS_SOURCES = \
 ./tests/main.c \
 
 
-EXE_SOURCES += $(TESTS_SOURCES)
-
 
 LIB_SOURCES = \
 ./src/edit-rules.c \
@@ -59,7 +65,7 @@ OK_INCLUDES_DONGLE = \
 
 
 SDK_INCLUDES = \
--I./sdk/components/boards \
+-I../OnexKernel/mod-sdk/components/boards \
 -I./sdk/components/libraries/balloc \
 -I./sdk/components/libraries/experimental_section_vars \
 -I./sdk/components/libraries/log \
@@ -83,23 +89,25 @@ libonex-lang-nrf.a: $(LIB_SOURCES:.c=.o)
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-ar rcs $@ $^
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-strip -g $@
 
-nrf.tests.dongle: libonex-lang-nrf.a $(EXE_SOURCES:.c=.o)
+nrf.tests.dongle: COMPILER_DEFINES=$(COMPILER_DEFINES_DONGLE)
+nrf.tests.dongle: libonex-lang-nrf.a $(TESTS_SOURCES:.c=.o)
 	rm -rf okolo
 	mkdir okolo
 	ar x ../OnexKernel/libonex-kernel-dongle.a --output okolo
 	ar x             ./libonex-lang-nrf.a      --output okolo
-	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-gcc $(LINKER_FLAGS) $(LD_FILES_DONGLE) -Wl,-Map=./onex-lang.map -o ./onex-lang.out $(EXE_SOURCES:.c=.o) okolo/*
-	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-size ./onex-lang.out
+	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-gcc $(LINKER_FLAGS) $(LD_FILES_DONGLE) -Wl,-Map=./onex-lang.map -o ./onex-lang.out $^ okolo/*
+	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-size --format=sysv -x ./onex-lang.out
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-objcopy -O binary ./onex-lang.out ./onex-lang.bin
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-objcopy -O ihex   ./onex-lang.out ./onex-lang.hex
 
-nrf.tests.feather-sense: libonex-lang-nrf.a $(EXE_SOURCES:.c=.o)
+nrf.tests.feather-sense: COMPILER_DEFINES=$(COMPILER_DEFINES_FEATHER_SENSE)
+nrf.tests.feather-sense: libonex-lang-nrf.a $(TESTS_SOURCES:.c=.o)
 	rm -rf okolo
 	mkdir okolo
 	ar x ../OnexKernel/libonex-kernel-feather-sense.a --output okolo
 	ar x             ./libonex-lang-nrf.a             --output okolo
-	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-gcc $(LINKER_FLAGS) $(LD_FILES_DONGLE) -Wl,-Map=./onex-lang.map -o ./onex-lang.out $(EXE_SOURCES:.c=.o) okolo/*
-	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-size ./onex-lang.out
+	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-gcc $(LINKER_FLAGS) $(LD_FILES_DONGLE) -Wl,-Map=./onex-lang.map -o ./onex-lang.out $^ okolo/*
+	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-size --format=sysv -x ./onex-lang.out
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-objcopy -O binary ./onex-lang.out ./onex-lang.bin
 	$(GCC_ARM_TOOLCHAIN)$(GCC_ARM_PREFIX)-objcopy -O ihex   ./onex-lang.out ./onex-lang.hex
 
