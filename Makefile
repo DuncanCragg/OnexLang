@@ -29,7 +29,7 @@ OK_INCLUDES = \
 
 
 #-------------------------------------------------------------------------------
-# Targets  REVISIT: ar rcs may be appending to existing archive not wiping and rebuilding!
+# Targets
 
 libonex-lang-arm.a: COMPILE_LINE=$(ARM_FLAGS) $(CC_FLAGS) $(ARM_CC_SYMBOLS) $(INCLUDES)
 libonex-lang-arm.a: CC=/home/duncan/x-tools/aarch64-unknown-linux-gnu/bin/aarch64-unknown-linux-gnu-gcc
@@ -37,6 +37,7 @@ libonex-lang-arm.a: LD=/home/duncan/x-tools/aarch64-unknown-linux-gnu/bin/aarch6
 libonex-lang-arm.a: AR=/home/duncan/x-tools/aarch64-unknown-linux-gnu/bin/aarch64-unknown-linux-gnu-ar
 libonex-lang-arm.a: TARGET=TARGET_ARM
 libonex-lang-arm.a: $(LIB_SOURCES:.c=.o)
+	rm -f $@
 	$(AR) rcs $@ $^
 
 libonex-lang-x86.a: COMPILE_LINE=$(X86_FLAGS) $(CC_FLAGS) $(X86_CC_SYMBOLS) $(INCLUDES)
@@ -45,6 +46,7 @@ libonex-lang-x86.a: LD=/usr/bin/gcc
 libonex-lang-x86.a: AR=/usr/bin/ar
 libonex-lang-x86.a: TARGET=TARGET_X86
 libonex-lang-x86.a: $(LIB_SOURCES:.c=.o)
+	rm -f $@
 	$(AR) rcs $@ $^
 
 tests.arm: COMPILE_LINE=$(ARM_FLAGS) $(CC_FLAGS) $(ARM_CC_SYMBOLS) $(INCLUDES)
