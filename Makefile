@@ -29,7 +29,7 @@ OK_INCLUDES = \
 
 
 #-------------------------------------------------------------------------------
-# Targets
+# Targets  REVISIT: ar rcs may be appending to existing archive not wiping and rebuilding!
 
 libonex-lang-arm.a: COMPILE_LINE=$(ARM_FLAGS) $(CC_FLAGS) $(ARM_CC_SYMBOLS) $(INCLUDES)
 libonex-lang-arm.a: CC=/home/duncan/x-tools/aarch64-unknown-linux-gnu/bin/aarch64-unknown-linux-gnu-gcc
